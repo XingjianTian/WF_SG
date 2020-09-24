@@ -1,0 +1,68 @@
+{
+  "table_id": "3",
+  "table_name": "testTable3",
+  "table_common": {
+    "Organization_engineeringName": "测试",
+    "Department_engineeringName": "测试",
+    "Sub_engineeringName": "测试",
+    "Construction_orgName": "测试",
+    "ConstructionLeader": "测试",
+    "TestCapacity": "测试",
+    "Contractor_orgName": "测试",
+    "ContractorLeader": "测试",
+    "TestPart": "测试",
+    "Construction_accordance": "测试",
+    "Inspection_accordance": "测试"
+  },
+  "table_containers": [
+    {
+      "container_id": "1",
+      "container_name": "Container1",
+      "container_properties": [
+      {
+          "property_id": "1",
+          "property_name": "propertyone",
+          "property_default": "none",
+          "property_value": "defaultvalue",
+          "property_range": "(10,50)",
+          "property_minSample": "1",
+          "property_realSample": "23",
+          "property_checkRecord": "21",
+          "property_checkResult": true
+        },
+         {
+          "property_id": "2",
+          "property_name": "propertytwo",
+          "property_default": "none",
+          "property_value": "defaultvalue",
+          "property_range": "",
+          "property_minSample": "",
+          "property_realSample": "",
+          "property_checkRecord": "",
+          "property_checkResult": false
+        }
+      ]
+    },
+     {
+      "container_id": "2",
+      "container_name": "Container2",
+      "container_properties": [
+         {
+          "property_id": "3",
+          "property_name": "propertyone",
+          "property_default": "none",
+          "property_value": "defaultvalue",
+          "property_range": "(100,200)",
+          "property_minSample": "23",
+          "property_realSample": "26",
+          "property_checkRecord": "25",
+          "property_checkResult": false
+        }
+      ]
+    }
+  ],
+  "table_signature": null,
+  "table_priorTableIds": null,
+  "table_lastSigner": null,
+  "table_timeStamp": null
+}

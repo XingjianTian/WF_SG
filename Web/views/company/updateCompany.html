@@ -1,0 +1,98 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <!-- form start -->
+            <form class="form-horizontal" role="form" method="post" action="/company/update/company" enctype="multipart/form-data">
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Company Name </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" readonly = "true" rows = "1" name="companyName">{{.companyInfo.CompanyName}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Company Owner </label>
+                        <div class="col-sm-4">
+                            {{.companyInfo.CompanyOwnerAccount}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Company Build Year </label>
+                        <div class="col-sm-4">
+                            {{.companyInfo.CompanyBuildYear}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Email Address </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows = "1" id="emailAddress" name="emailAddress" placeholder="Enter email address">{{.companyInfo.EmailAddress}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Phone Number </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows = "1" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number">{{.companyInfo.PhoneNumber}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Investment </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows = "1"  name="companyInvest">{{.companyInfo.CompanyInvest}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Size </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows = "1" name="companySize">{{.companyInfo.CompanySize}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Location </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows = "1" name="companyLocation">{{.companyInfo.CompanyLocation}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Website </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows = "1" name="companyWebsite">{{.companyInfo.CompanyWebsite}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNickName" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-4">
+                            <textarea name="descript" class="form-control" rows="3" placeholder="Enter ...">{{.companyInfo.Descript}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputHeadIco" class="col-sm-2 control-label">Headico</label>
+
+                        <div class="col-sm-4">
+                            <input name="headico" type="file" class="form-control" id="inputHeadIco" placeholder="Headico">
+                        </div>
+
+                    </div>
+                </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

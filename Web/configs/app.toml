@@ -1,0 +1,21 @@
+[site]
+DefaultTitle  = ""
+DefaultLayout = "shared/layout.html"
+DefaultError  = "shared/error.html"
+
+SessionCoolieName = "my_go_dht_ccjsicnsbdhcbsjcjdbzas"
+SessionExpires    = 1 # session保持时间 /小时
+
+#调试开关
+APPDebug     = true #IRIS框架调试模式
+DblogerModel = true #Gorm调试模式
+
+UploadSize         = 10               #允许上传文件的大小 单位M
+UploadSuffixExists = ".jpg,.png,.jpge,.gif" #允许上传文件的后缀
+
+[server]
+domain = ""
+port   = "8081"
+
+[pagination]
+PageSize = 10

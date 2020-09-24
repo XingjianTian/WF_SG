@@ -1,0 +1,307 @@
+#
+# Copyright SecureKey Technologies Inc. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+#
+# The network connection profile provides client applications the information about the target
+# blockchain network that are necessary for the applications to interact with it. These are all
+# knowledge that must be acquired from out-of-band sources. This file provides such a source.
+#
+
+
+#
+# Schema version of the content. Used by the SDK to apply the corresponding parsing rules.
+#
+version: 1.0.0
+
+#
+# The client section used by GO SDK.
+#
+client:
+
+  organization: HUST
+
+  logging:
+    level: info
+
+  # Root of the MSP directories with keys and certs.
+  cryptoconfig:
+    path: C:/Users/TXJ/go/src/FabricNetwork/crypto-config
+
+  # Some SDKs support pluggable KV stores, the properties under "credentialStore"
+  # are implementation specific
+  credentialStore:
+    # [Optional]. Used by user store. Not needed if all credentials are embedded in configuration
+    # and enrollments are performed elswhere.
+    path: "/tmp/state-store"
+
+    # [Optional]. Specific to the CryptoSuite implementation used by GO SDK. Software-based implementations
+    # requiring a key store. PKCS#11 based implementations does not.
+    cryptoStore:
+      # Specific to the underlying KeyValueStore that backs the crypto key store.
+      path: /tmp/msp
+
+  # [Optional] BCCSP config for the client. Used by GO SDK.
+  BCCSP:
+    security:
+     enabled: true
+     default:
+      provider: "SW"
+     hashAlgorithm: "SHA2"
+     softVerify: true
+     level: 256
+
+  tlsCerts:
+    # [Optional]. Use system certificate pool when connecting to peers, orderers (for negotiating TLS) Default: false
+    systemCertPool: false
+
+    # [Optional]. Client key and cert for TLS handshake with peers and orderers
+    client:
+      key:
+        path:
+      cert:
+        path:
+channels:
+  # multi-org test channel
+  hustgym:
+    # anchor peers only for the bootstrap config is required, other org's peers will be discovered
+    peers:
+      peer0.HUST.builder.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+      peer0.WH-zhijianju.supervisor.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+      peer0.zhongjian-1-ju.constructor.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+    policies:
+      queryChannelConfig:
+        minResponses: 1
+        maxTargets: 1
+        retryOpts:
+          attempts: 5
+          initialBackoff: 500ms
+          maxBackoff: 5s
+          backoffFactor: 2.0
+
+  hustdomitory:
+  # anchor peers only for the bootstrap config is required, other org's peers will be discovered
+    peers:
+      peer0.HUST.builder.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+      peer0.WH-zhijianju.supervisor.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+      peer0.zhongjian-2-ju.constructor.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+    policies:
+      queryChannelConfig:
+        minResponses: 1
+        maxTargets: 1
+        retryOpts:
+          attempts: 5
+          initialBackoff: 500ms
+          maxBackoff: 5s
+          backoffFactor: 2.0
+#
+# list of participating organizations in this network
+#
+organizations:
+  HUST:
+    mspid: HUSTMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/HUST.builder.com/users/{username}@HUST.builder.com/msp
+
+    peers:
+      - peer0.HUST.builder.com
+
+  WH-zhijianju:
+    mspid: WH-zhijianjuMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/WH-zhijianju.supervisor.com/users/{username}@WH-zhijianju.supervisor.com/msp
+
+    peers:
+      - peer0.WH-zhijianju.supervisor.com
+
+  zhongjian-1-ju:
+    mspid: zhongjian-1-juMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/zhongjian-1-ju.constructor.com/users/{username}@zhongjian-1-ju.constructor.com/msp
+
+    peers:
+      - peer0.zhongjian-1-ju.constructor.com
+
+  zhongjian-2-ju:
+    mspid: zhongjian-2-juMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/zhongjian-2-ju.constructor.com/users/{username}@zhongjian-2-ju.constructor.com/msp
+
+    peers:
+      - peer0.zhongjian-2-ju.constructor.com
+  # Orderer Org name
+  orderer.gov.com:
+    # Membership Service Provider ID for this organization
+    mspID: OrdererMSP
+
+    # Needed to load users crypto keys and certs for this org (absolute path or relative to global crypto path, DEV mode)
+    cryptoPath: ordererOrganizations/gov.com/users/{username}@gov.com/msp
+
+#
+# List of peers to send various requests to, including endorsement, query
+# and event listener registration.
+#
+peers:
+  # defining bootstrap peers only
+  peer0.HUST.builder.com:
+    # [Optional] Default: Infer from hostname
+    url: localhost:7051
+    eventUrl: localhost:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.HUST.builder.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+
+    tlsCACerts:
+      path: C:/Users/TXJ/go/src/FabricNetwork/crypto-config/peerOrganizations/HUST.builder.com/tlsca/tlsca.HUST.builder.com-cert.pem
+
+  peer0.WH-zhijianju.supervisor.com:
+    url: localhost:8051
+    eventUrl: localhost:8053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.WH-zhijianju.supervisor.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+
+    tlsCACerts:
+      path: C:/Users/TXJ/go/src/FabricNetwork/crypto-config/peerOrganizations/WH-zhijianju.supervisor.com/tlsca/tlsca.WH-zhijianju.supervisor.com-cert.pem
+
+  peer0.zhongjian-1-ju.constructor.com:
+    url: localhost:9051
+    eventUrl: localhost:9053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.zhongjian-1-ju.constructor.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+
+    tlsCACerts:
+      path: C:/Users/TXJ/go/src/FabricNetwork/crypto-config/peerOrganizations/zhongjian-1-ju.constructor.com/tlsca/tlsca.zhongjian-1-ju.constructor.com-cert.pem
+
+  peer0.zhongjian-2-ju.constructor.com:
+    url: localhost:6051
+    eventUrl: localhost:6053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.zhongjian-2-ju.constructor.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+
+    tlsCACerts:
+      path:  C:/Users/TXJ/go/src/FabricNetwork/crypto-config/peerOrganizations/zhongjian-2-ju.constructor.com/tlsca/tlsca.zhongjian-2-ju.constructor.com-cert.pem
+#
+# List of orderers to send transaction and channel create/update requests to. For the time
+# being only one orderer is needed. If more than one is defined, which one get used by the
+# SDK is implementation specific. Consult each SDK's documentation for its handling of orderers.
+#
+orderers:
+  # needed to fetch the ordrerer config for create channel
+  orderer.gov.com:
+    # [Optional] Default: Infer from hostname
+    #url: orderer.hlexample.com:7050
+    url: localhost:7050
+    grpcOptions:
+      ssl-target-name-override: orderer.gov.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+
+    tlsCACerts:
+      path:  C:/Users/TXJ/go/src/FabricNetwork/crypto-config/ordererOrganizations/gov.com/tlsca/tlsca.gov.com-cert.pem
+
+
+# EntityMatchers enable substitution of network hostnames with static configurations
+ # so that properties can be mapped. Regex can be used for this purpose
+# UrlSubstitutionExp can be empty which means the same network hostname will be used
+# UrlSubstitutionExp can be given same as mapped peer url, so that mapped peer url can be used
+# UrlSubstitutionExp can have golang regex matchers like ${1}.local.example.${2}:${3} for pattern
+ # like peer0.org1.example.com:1234 which converts peer0.org1.example.com to peer0.org1.local.example.com:1234
+# sslTargetOverrideUrlSubstitutionExp follow in the same lines as
+ # SubstitutionExp for the fields gprcOptions.ssl-target-name-override respectively
+# In any case mappedHost's config will be used, so mapped host cannot be empty, if entityMatchers are used
+
+entityMatchers:
+
+  orderer:
+  - pattern: (\w*)orderer.gov.com(\w*)
+    urlSubstitutionExp: localhost:7050
+    sslTargetOverrideUrlSubstitutionExp: orderer.gov.com
+    mappedHost: orderer.gov.com
+  peer:
+  # the below matcher will allow dynamic discovery to use the anchor peer (peer0.org1.example.com)
+  # as a template for all org1 discovered peers config
+  - pattern: (\w*)peer0.HUST.builder.com(\w*)
+    urlSubstitutionExp: localhost:7051
+    eventUrlSubstitutionExp: localhost:7053
+    sslTargetOverrideUrlSubstitutionExp: peer0.HUST.builder.com
+    mappedHost: peer0.HUST.builder.com
+
+  - pattern: (\w*)peer0.WH-zhijianju.supervisor.com(\w*)
+    urlSubstitutionExp: localhost:8051
+    eventUrlSubstitutionExp: localhost:8053
+    sslTargetOverrideUrlSubstitutionExp: peer0.WH-zhijianju.supervisor.com
+    mappedHost: peer0.WH-zhijianju.supervisor.com
+
+  - pattern: (\w*)peer0.zhongjian-1-ju.constructor.com(\w*)
+    urlSubstitutionExp: localhost:9051
+    eventUrlSubstitutionExp: localhost:9053
+    sslTargetOverrideUrlSubstitutionExp: peer0.zhongjian-1-ju.constructor.com
+    mappedHost: peer0.zhongjian-1-ju.constructor.com
+
+  
+  - pattern: (\w*)peer0.zhongjian-2-ju.constructor.com(\w*)
+    urlSubstitutionExp: localhost:6051
+    eventUrlSubstitutionExp: localhost:6053
+    sslTargetOverrideUrlSubstitutionExp: peer0.zhongjian-2-ju.constructor.com
+    mappedHost: peer0.zhongjian-2-ju.constructor.com

@@ -1,0 +1,74 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card">
+            <!-- form start -->
+            <form class="form-horizontal" role="form" method="post" action="/user/add/user" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="inputNickName" class="col-sm-2 control-label">Account</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="Enter your account" value="" name="account">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail" class="col-sm-2 control-label">Email Address</label>
+
+                        <div class="col-sm-4">
+                            <input  name="email" type="email" class="form-control" id="inputEmail" placeholder="Enter your email address" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Password" class="col-sm-2 control-label">Password</label>
+
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" id="Password" placeholder="Enter your password" name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RePassword" class="col-sm-2 control-label">Confirm Password</label>
+
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" id="RePassword" placeholder="Re-enter your password to confirm" name="Repassword">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNickName" class="col-sm-2 control-label">Phone Number</label>
+
+                        <div class="col-sm-4">
+                            <input  name="phoneNumber" type="text" class="form-control" id="phoneNumber" placeholder="What is your numebr?" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputNickName" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-4">
+                            <textarea name="descript" class="form-control" rows="3" placeholder="Please decribe yourself..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputHeadIco" class="col-sm-2 control-label">Headico</label>
+
+                        <div class="col-sm-4">
+                            <input name="headico" type="file" class="form-control" id="inputHeadIco" placeholder="Choose file(png/jpg)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputHeadIco" class="col-sm-2 control-label">&nbsp;</label>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

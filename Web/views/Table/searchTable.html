@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+
+            <div class="box-header with-border">
+                <form class="form-horizontal" role="form" method="POST" action="/Table/query/table"
+                      enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">表单ID</label>
+                            <div class="controls">
+                                <input name="tableIDContains" type="text" placeholder="根据表单ID搜索"
+                                       title="表单ID"
+                                       value="" class="leipiplugins" leipiplugins="text">
+                            </div>
+                        </div>
+
+                        <h3 class="box-title">
+                            <button type="submit" class="btn btn-primary">简单搜索</button>
+                        </h3>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border">
+
+                <form class="form-horizontal" role="form" method="POST" action="/Table/query/tablecomplex"
+                      enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">项目号</label>
+                            <div class="controls">
+                                <input name="programNum" type="text" title="项目号" value=""
+                                       class="leipiplugins"
+                                       leipiplugins="text">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">填表人员</label>
+                            <div class="controls">
+                                <input name="manFill" type="text" title="填表人员" value=""
+                                       class="leipiplugins"
+                                       leipiplugins="text">
+                            </div>
+
+                        </div>
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">填表单位</label>
+                            <div class="controls">
+                                <input name="orgFill" type="text" title="填表单位" value=""
+                                       class="leipiplugins"
+                                       leipiplugins="text">
+                            </div>
+
+                        </div>
+
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">单位工程名称</label>
+                            <div class="controls">
+                                <input name="orgName" type="text" title="单位工程名称" value=""
+                                       class="leipiplugins"
+                                       leipiplugins="text">
+                            </div>
+
+                        </div>
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">分部工程名称</label>
+                            <div class="controls">
+                                <input name="depName" type="text" title="分部工程名称" value=""
+                                       class="leipiplugins"
+                                       leipiplugins="text">
+                            </div>
+
+                        </div>
+
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">分项工程名称</label>
+                            <div class="controls">
+                                <input name="subName" type="text" title="分项工程名称" value=""
+                                       class="leipiplugins"
+                                       leipiplugins="text">
+                            </div>
+
+                        </div>
+
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">创建时间起始</label>
+                            <div class="controls">
+                                <input name="timeFrom" type="text"
+                                       placeholder="格式：YYYY-MM-DD HH-MM-SS"
+                                       title="创建时间起始" value="" class="leipiplugins" leipiplugins="text">
+                            </div>
+
+                        </div>
+
+
+                        <div class="control-group">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">创建时间截至</label>
+                            <div class="controls">
+                                <input name="timeEnd" type="text"
+                                       placeholder="格式：YYYY-MM-DD HH-MM-SS"
+                                       title="创建时间截至" value="" class="leipiplugins" leipiplugins="text">
+                            </div>
+
+                        </div>
+
+                        <h3 class="box-title">
+                            <button type="submit" class="btn btn-primary">综合搜索</button>
+                        </h3>
+
+
+                    </fieldset>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>

@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <!-- /.box-header -->
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>Account</th>
+                        <th>Description</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Account Type</th>
+                        <th>Operations</th>
+                    </tr>
+                    {{range $i, $v := .list}}
+                        <tr>
+                            <td>{{$v.Account}}</td>
+                            <td>{{$v.Descript}}</td>
+                            <td>{{$v.EmailAddress}}</td>
+                            <td>{{$v.PhoneNumber}}</td>
+                            <td>{{$v.Type}}</td>
+                            <td>
+                                <a href="/user/query/user/{{$v.Account}}"><span
+                                            class="badge badge-success">Details</span></a>
+                                <a href="/user/update/user/{{$v.Account}}"><span
+                                            class="badge badge-primary">Update</span></a>
+                                <a href="#"><span class="badge badge-danger" data-toggle="modal"
+                                                  data-target="#modal_remove_user" data-clientid={{$v.Account}}>
+                                    Remove
+                                </span></a>
+                            </td>
+                        </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+            {{.PageHtml | strToHtml}}
+        </div>
+    </div>
+</div>
+
+<!-- /.remove modal -->
+<div class="modal fade" id="modal_remove_user">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete User</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-dark" id="remove_user_confirm" href="">Apply</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    // modal_remove_client modal event
+    $("#modal_remove_user").on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const client_id = button.data('clientid');
+        const modal = $(this);
+        modal.find('.modal-body').text("You are about to remove user " + client_id);
+        modal.find('#remove_user_confirm').val(client_id);
+    })
+
+    // remove_client_confirm button event
+    $(document).ready(function () {
+        $("#remove_user_confirm").click(function () {
+            const client_id = $(this).val();
+            $.ajax({
+                url: '/user/del/user/' + client_id,
+                async: false,
+                method: 'get',
+                success: function (data) {
+                    $("#modal_remove_client").modal('hide');
+                    toastr.success('Removed user successfully');
+
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+</script>>

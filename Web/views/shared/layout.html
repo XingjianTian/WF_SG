@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{.Title}}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.css">
+    <link rel="stylesheet" href="/node_modules/admin-lte/dist/css/adminlte.min.css">
+
+    <!--chartjs-->
+    <script src="/node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+    <script src="/node_modules/admin-lte/plugins/jquery/jquery.js"></script>
+    <script src="/node_modules/admin-lte/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/node_modules/admin-lte/plugins/select2/css/select2.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="/node_modules/admin-lte/plugins/toastr/toastr.min.css">
+    <!-- Jquery Tags Input -->
+    <link rel="stylesheet" href="/node_modules/jquery-tags-input/dist/jquery.tagsinput.min.css">
+
+<!--[endif]-->
+    <!-- Google Font -->
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+
+
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-list"></i></a>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <nav class="navbar-nav ml-auto">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{.userInfo.Headico}}" class="user-image" alt="User Image">
+                            <span class="hidden-xs">{{.usernfo.Account}}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="{{.userInfo.Headico}}" class="img-circle" alt="User Image">
+
+                                <p>
+                                    {{.userInfo.Descript}}
+                                    <small>{{.userInfo.Account}}</small>
+                                </p>
+                            </li>
+
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="/user/update/password" class="btn btn-default btn-flat">Change Password</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="/login/logout" class="btn btn-default btn-flat">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/user/update/user" ><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+
+    </nav>
+
+
+    <!-- Main navbar links -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <a href="#" class="brand-link">
+            <!-- <img src="static/dist/img/logo.png" alt="Wireguard UI"
+                class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+            <span class="brand-text font-weight-light">Smart Grid System</span>
+        </a>
+
+        <!-- Sidebar -->
+        <section class="sidebar">
+            <div class="user-panel  mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{.userInfo.Headico}}" class="img-circle" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">{{.userName}}</a>
+                </div>
+            </div>
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+                <li class="nav-header">MAIN NAVIGATION</li>
+                <li class="nav-item">
+                    <a href="/system/main" class="nav-link">
+                        <i class="nav-icon fa fa-dashcube"></i>
+                        <p>System Main</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/IEM" class="nav-link">
+                        <i class="nav-icon fa fa-building"></i>
+                        <p>IEM info</p>
+                    </a>
+                </li>
+
+                <!--user tree view-->
+                <li class="nav-item has-treeview" >
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-user"></i>
+                        <p>User</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/user/list/user" class="nav-link active">
+                                <i class="nav-icon fa fa-folder-o"></i>
+                                <p>user List</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/user/add/user" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>Add user</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/user/query/user" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>My Info</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!--IED treeview-->
+
+                <li class="nav-item has-treeview" >
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-bolt"></i>
+                        <p>IED</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/IED/list/ied" class="nav-link active">
+                                <i class="nav-icon fa fa-folder-o"></i>
+                                <p>IED List</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/IED/add/ied" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>Add IED</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/IED/query/ied" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>My IED</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+
+
+                <!--wireguard treeview-->
+                <li class="nav-item has-treeview" >
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-wifi"></i>
+                        <p>WireGuard</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/wg/list/wg" class="nav-link active">
+                                <i class="nav-icon fa fa-folder-o"></i>
+                                <p>WireGuard Client List</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a href = "#" class="nav-link active" data-toggle="modal" data-target="#modal_new_client">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>Add WireGuard Instance</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href = "#" class="nav-link active" data-toggle="modal" data-target="#modal_query_my_client">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>My WireGuard</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!--company treeview-->
+                <li class="nav-item has-treeview" >
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-briefcase"></i>
+                        <p>Company</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/company/list/company" class="nav-link active">
+                                <i class="nav-icon fa fa-folder-o"></i>
+                                <p>Company List</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/company/add/company" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>Regiter Company</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/company/query/company" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>My Company</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!--contract treeview-->
+                <li class="nav-item has-treeview" >
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fa fa-handshake-o"></i>
+                        <p>Contract</p>
+                        <i class="right fa fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/contract/list/contract" class="nav-link active">
+                                <i class="nav-icon fa fa-folder-o"></i>
+                                <p>Contract List</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/contract/add/contract" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>Offer Contract</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/contract/query/contract" class="nav-link active">
+                                <i class="nav-icon fa fa-pencil-square-o"></i>
+                                <p>My Contract</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+
+            </ul>
+            </nav>
+        </section>
+    </aside>
+
+    <div class="modal fade" id="modal_new_client">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">New Wireguard Client</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form name="frm_new_client" id="frm_new_client">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="client_name" class="control-label">Name</label>
+                            <input type="text" class="form-control" id="client_name" name="client_name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client_allocated_ips" class="control-label">IP Allocation</label>
+                            <input type="text" data-role="tagsinput" class="form-control" id="client_allocated_ips"
+                                    value = "192.168.0.1/32">
+                        </div>
+                        <div class="form-group">
+                            <label for="client_allowed_ips" class="control-label">Allowed IPs</label>
+                            <input type="text" data-role="tagsinput" class="form-control" id="client_allowed_ips"
+                                   value="0.0.0.0/0">
+                        </div>
+                        <div class="form-group">
+                            <div class="icheck-primary d-inline">
+                                <input type="checkbox" id="enabled" checked>
+                                <label for="enabled">
+                                    Enable after creation
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <div class="modal fade" id="modal_query_my_client">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">My WireGuard Details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form name="frm_edit_client" id="frm_edit_client">
+                    <div class="modal-body">
+                        <input type="hidden" id="_client_id" name="_client_id">
+                        <div class="form-group">
+                            <label for="_client_name" class="control-label">Account</label>
+                            <input type="text" class="form-control" id="_client_name"  disabled="disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_created_at" class="control-label">Created At</label>
+                            <input type="text" class="form-control" id="_client_created_at" disabled="disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_updated_at" class="control-label">Updated At</label>
+                            <input type="text" class="form-control" id="_client_updated_at" disabled="disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_public_key" class="control-label">Public Key</label>
+                            <input type="text" class="form-control" id="_client_public_key"  disabled="disabled">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="_client_allocated_ips" class="control-label">IP Allocation</label>
+                            <input type="text" data-role="tagsinput" class="form-control" id="_client_allocated_ips" disabled="disabled" readonly = "readonly">
+                        </div>
+                        <div class="form-group">
+                            <label for="_client_allowed_ips" class="control-label">Allowed IPs</label>
+                            <input type="text" data-role="tagsinput" class="form-control" id="_client_allowed_ips" disabled="disabled" readonly = "readonly">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_port" class="control-label">Port</label>
+                            <input type="text" class="form-control" id="_client_port" name="_client_port" disabled="disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_post_up" class="control-label">Post Up</label>
+                            <input type="text" class="form-control" id="_client_private_key" name="_client_post_up" disabled="disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_post_down" class="control-label">Post Down</label>
+                            <input type="text" class="form-control" id="_client_post_down" name="_client_post_down" disabled="disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="_client_listen_ips" class="control-label">Listend IPs</label>
+                            <input type="text" data-role="tagsinput" class="form-control" id="_client_listen_ips" disabled="disabled" readonly = "readonly">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="icheck-primary d-inline">
+                                <input type="checkbox" id="_enabled" disabled="disabled">
+                                <label for="_enabled">
+                                    Enable this client
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="content-wrapper">
+
+
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark">
+                                {{.Title}}
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Layout sets the layout template file which should use
+            // the { yield } func to yield the main template file
+            // and optionally {partial/partial_r/render} to render
+            // other template files like headers and footers.
+
+            func (s *HTMLEngine) layoutFuncsFor(name string, binding interface{}) {
+	funcs := template.FuncMap{
+		"yield": func() (template.HTML, error) {
+			buf, err := s.executeTemplateBuf(name, binding)
+			// Return safe HTML here since we are rendering our own template.
+			return template.HTML(buf.String()), err
+		},-->
+            {{ yield }}
+        </div>
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-inline">
+            <b>Version</b> 1.0.0
+        </div>
+        <strong>Copyright &copy; 2010-2021 <a href="https://github.com/Rorschache">CCNU-XJT</a>.</strong> All rights
+        reserved.
+    </footer>
+
+    </div>
+
+
+
+<!--[if lt IE 9]-->
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/node_modules/admin-lte/plugins/fastclick/fastclick.js"></script>
+<script src="/node_modules/admin-lte/dist/js/adminlte.min.js"></script>
+<!-- Select2 -->
+<script  src="/node_modules/admin-lte/plugins/select2/js/select2.min.js"></script>
+
+
+
+<script src="/node_modules/admin-lte/plugins/jquery-validation/jquery.validate.min.js"></script>
+<!-- Toastr -->
+<script src="/node_modules/admin-lte/plugins/toastr/toastr.min.js"></script>
+<!-- Jquery Tags Input -->
+<script src="/node_modules/jquery-tags-input/dist/jquery.tagsinput.min.js"></script>
+<!-- Custom js -->
+<script  src="/public/jsonform/deps/underscore.js"></script>
+<script  src="/public/jsonform/deps/opt/jsv.js"></script>
+<script  src="/public/jsonform/lib/jsonform.js"></script>
+<script src="/public/custom/helper.js"></script>
+
+
+
+
+
+
+<script type = "text/javascript" >
+    $(document).ready(function() {
+        $('ul.treeview-menu>li').find('a[href="' + window.location.pathname + '"]').closest('li').addClass('active');
+        $('ul.treeview-menu>li').find('a[href="' + window.location.pathname + '"]').closest('li.treeview').addClass('active');
+        $('.sidebar-menu>li').find('a[href="' + window.location.pathname + '"]').closest('li').addClass('active');
+    })
+</script>
+
+<script>
+    // populateClient function for render new client info
+    // on the client page.
+    function populateClient(client_id) {
+        $.ajax({
+            cache: false,
+            method: 'GET',
+            url: '/wg/update/info' + client_id,
+            dataType: 'json',
+            contentType: "application/json",
+            success: function (resp) {
+                renderClientList([resp]);
+            },
+            error: function (jqXHR, exception) {
+                const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                toastr.error(responseJson['message']);
+            }
+        });
+    }
+
+    // submitNewClient function for new client form submission
+    function submitNewClient() {
+        const name = $("#client_name").val();
+        const allocated_ips = $("#client_allocated_ips").val().split(",");
+        var allocated_ips_array=[]
+        for (i = 0; i < allocated_ips.length; i++) {
+            var allocated_ip = {ip_address:allocated_ips[i]};
+            allocated_ips_array.push(allocated_ip)
+        }
+
+
+        const allowed_ips = $("#client_allowed_ips").val().split(",");
+        var allowed_ips_array=[]
+        for (i = 0; i < allowed_ips.length; i++) {
+            var allowed_ip = {ip_address:allowed_ips[i]};
+            allowed_ips_array.push(allowed_ip)
+        }
+        let enabled = false;
+        if ($("#enabled").is(':checked')){
+            enabled = true;
+        }
+        const values = {"account": name, "allocated_ips": allocated_ips_array, "allowed_ips": allowed_ips_array,
+            "enabled": enabled};
+
+        $.ajax({
+            url: '/wg/add/wg',
+            data: {"jsonvalues":JSON.stringify(values)},
+            type: "post",
+            async: false,
+            success: function() {
+                $("#modal_new_client").modal('hide');
+                toastr.success('Created new client successfully');
+            },
+            error: function(jqXHR, exception) {
+                const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                toastr.error(responseJson['message']);
+            }
+        });
+    }
+
+    // updateIPAllocationSuggestion function for automatically fill
+    // the IP Allocation input with suggested ip addresses
+    /*
+    function updateIPAllocationSuggestion() {
+        $.ajax({
+            cache: false,
+            method: 'GET',
+            url: '/api/suggest-client-ips',
+            dataType: 'json',
+            contentType: "application/json",
+            success: function(data) {
+                data.forEach(function (item, index) {
+                    $('#client_allocated_ips').addTag(item);
+                })
+            },
+            error: function(jqXHR, exception) {
+                const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                toastr.error(responseJson['message']);
+            }
+        });
+    }
+    */
+</script>
+
+<script>
+    //Initialize Select2 Elements
+    $(".select2").select2()
+
+    // IP Allocation tag input
+    $("#client_allocated_ips").tagsInput({
+        'width': '100%',
+        'height': '75%',
+        'interactive': true,
+        'defaultText': 'Add More',
+        'removeWithBackspace': true,
+        'minChars': 0,
+        'maxChars': 18,
+        'placeholderColor': '#666666'
+    });
+
+    // AllowedIPs tag input
+    $("#client_allowed_ips").tagsInput({
+        'width': '100%',
+        'height': '75%',
+        'interactive': true,
+        'defaultText': 'Add More',
+        'removeWithBackspace': true,
+        'minChars': 0,
+        'maxChars': 18,
+        'placeholderColor': '#666666'
+    });
+
+    // New client form validation
+    $(document).ready(function () {
+        $.validator.setDefaults({
+            submitHandler: function () {
+                submitNewClient();
+            }
+        });
+        $("#frm_new_client").validate({
+            rules: {
+                client_name: {
+                    required: true,
+                },
+                client_email: {
+                    required: true,
+                    email: true,
+                },
+            },
+            messages: {
+                client_name: {
+                    required: "Please enter a name"
+                },
+                client_email: {
+                    required: "Please enter an email address",
+                    email: "Please enter a valid email address"
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
+
+    // New Client modal event
+    $(document).ready(function () {
+        $("#modal_new_client").on('shown.bs.modal', function (e) {
+            $("#client_name").val("");
+            $("#client_email").val("");
+            $("#client_allocated_ips").importTags('');
+            //updateIPAllocationSuggestion();
+        });
+    });
+
+    // Details of my client modal event
+    $(document).ready(function () {
+        $("#modal_query_my_client").on('shown.bs.modal', function (event) {
+            let modal = $(this);
+            const button = $(event.relatedTarget);
+            const client_id = button.data('clientid');
+
+            // IP Allocation tag input
+            modal.find("#_client_allocated_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': false,
+                'defaultText': 'Add More',
+                'removeWithBackspace': false,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+            // AllowedIPs tag input
+            modal.find("#_client_allowed_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': false,
+                'defaultText': 'Add More',
+                'removeWithBackspace': false,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+            //listen address tags
+            modal.find("#_client_listen_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': false,
+                'defaultText': 'Add More',
+                'removeWithBackspace': false,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+
+
+            // update client modal data
+            $.ajax({
+                cache: false,
+                method: 'GET',
+                url: '/wg/query/my',
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (resp) {
+
+                    modal.find(".modal-title").text("My WireGuard Details");
+                    modal.find("#_client_id").val(resp.account);
+                    modal.find("#_client_name").val(resp.account);
+                    modal.find("#_client_created_at").val(resp.CreatedAt);
+                    modal.find("#_client_updated_at").val(resp.UpdatedAt);
+                    modal.find("#_client_public_key").val(resp.public_key);
+
+
+                    modal.find("#_client_allocated_ips").importTags('');
+                    resp.allocated_ips.forEach(function (obj) {
+                        modal.find("#_client_allocated_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_client_allowed_ips").importTags('');
+                    resp.allowed_ips.forEach(function (obj) {
+                        modal.find("#_client_allowed_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_client_port").val(resp.listen_port);
+                    modal.find("#_client_post_up").val(resp.post_up);
+                    modal.find("#_client_post_down").val(resp.post_down);
+
+                    modal.find("#_client_listen_ips").importTags('');
+                    resp.listen_addresses.forEach(function (obj) {
+                        modal.find("#_client_listen_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_enabled").prop("checked", resp.enabled);
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+
+
+    // apply_config_confirm button event
+    $(document).ready(function () {
+        $("#apply_config_confirm").click(function () {
+            $.ajax({
+                cache: false,
+                method: 'GET',
+                url: '/api/apply-wg-config',
+                dataType: 'json',
+                contentType: "application/json",
+                success: function(data) {
+                    $("#modal_apply_config").modal('hide');
+                    toastr.success('Applied config successfully');
+                },
+                error: function(jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
+

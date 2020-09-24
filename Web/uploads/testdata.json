@@ -1,0 +1,68 @@
+{
+  "table_id": "1",
+  "table_name": "testTable",
+  "table_common": {
+    "Organization_engineeringName": "",
+    "Department_engineeringName": "",
+    "Sub_engineeringName": "",
+    "Construction_orgName": "",
+    "ConstructionLeader": "",
+    "TestCapacity": "",
+    "Contractor_orgName": "",
+    "ContractorLeader": "",
+    "TestPart": "",
+    "Construction_accordance": "",
+    "Inspection_accordance": ""
+  },
+  "table_containers": {
+    "ContainerId_1": {
+      "container_id": "",
+      "container_name": "Container1",
+      "container_properties": {
+        "PropertyId_1": {
+          "property_id": "1",
+          "property_name": "propertyone",
+          "property_default": "none",
+          "property_value": "defaultvalue",
+          "property_range": "",
+          "property_minSample": "",
+          "property_realSample": "",
+          "property_checkRecord": "",
+          "property_checkResult": false
+        },
+        "PropertyId_2": {
+          "property_id": "2",
+          "property_name": "propertytwo",
+          "property_default": "none",
+          "property_value": "defaultvalue",
+          "property_range": "",
+          "property_minSample": "",
+          "property_realSample": "",
+          "property_checkRecord": "",
+          "property_checkResult": false
+        }
+      }
+    },
+    "ContainerId_2": {
+      "container_id": "",
+      "container_name": "Container2",
+      "container_properties": {
+        "PropertyId_3": {
+          "property_id": "3",
+          "property_name": "propertyone",
+          "property_default": "none",
+          "property_value": "defaultvalue",
+          "property_range": "",
+          "property_minSample": "",
+          "property_realSample": "",
+          "property_checkRecord": "",
+          "property_checkResult": false
+        }
+      }
+    }
+  },
+  "table_signature": null,
+  "table_priorTableIds": null,
+  "table_lastSigner": null,
+  "table_timeStamp": null
+}

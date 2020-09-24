@@ -1,0 +1,45 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary col-md-6">
+            <!-- /.box-header -->
+
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td>User Account</td>
+                    <td>{{.userInfo.Account}}</td>
+                </tr>
+                <tr>
+                    <td>User Type</td>
+                    <td> {{.userInfo.Type}}</td>
+                </tr>
+                <tr>
+                    <td>Email Address</td>
+                    <td> {{.userInfo.EmailAddress}}</td>
+                </tr>
+                <tr>
+                    <td>Phone Number</td>
+                    <td>  {{.userInfo.PhoneNumber}}</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td> {{.userInfo.Descript}}</td>
+                </tr>
+
+                <tr>
+                    <td>Headico</td>
+                    <td> <img src={{.userInfo.Headico}}/> </td>
+                </tr>
+
+
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

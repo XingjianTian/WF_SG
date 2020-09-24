@@ -1,0 +1,63 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <div class = "box">
+        <!-- general form elements -->
+        <div class="box-body">
+
+            <form></form>
+            <div id="res" class="box-header with-border"></div>
+            <script type="text/javascript" src="/public/jsonform/deps/jquery.min.js"></script>
+            <script type="text/javascript" src="/public/jsonform/deps/underscore.js"></script>
+            <script type="text/javascript" src="/public/jsonform/deps/opt/jsv.js"></script>
+            <script  src="/public/jsonform/lib/jsonform.js"></script>
+            <script type="text/javascript">
+
+
+                let FormatStr = {{.tableFormatStr}};
+                var t =JSON.parse(FormatStr);
+
+                let ValuesStr = {{.tableValuesStr}};
+                var v = JSON.parse(ValuesStr)
+
+                $('form').jsonForm({
+                    form: t.form,
+                    schema:t.schema,
+                    form:t.form,
+                    value: v,
+                    onSubmit: function (errors, values) {
+                        if (errors) {
+                            $('#res').html('<p>某些必填字段未填</p>');
+                        } else {
+                            //$('form').action = "/Table/add/table/Manually";
+                            //window.location.href = "/Table";
+                            $.ajax({
+                                url:"/Table/add/tablemanually",
+                                data:{"jsonvalues":JSON.stringify(values)},
+                                type:"post",
+                                async:false,
+                                success:function (obj) {
+                                    let str = obj.toString();
+                                    if(str==="/Table"){
+                                        window.location.href = str
+                                    }else {
+                                        alert(str);
+                                    }
+                                }
+                            });
+
+
+
+                        }
+                    }
+                    });
+            </script>
+            <!-- /.box-header -->
+            <!-- form start -->
+        </div>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

@@ -1,0 +1,505 @@
+<style>
+    .paused-client {
+        transition: transform .2s;
+        cursor: pointer;
+    }
+    i[class^="paused-client"]:hover { transform: scale(1.5); }
+</style>
+
+<!-- <h5 class="mt-4 mb-2">Wireguard Clients</h5> -->
+    <div class="row" id="client-list">
+
+    </div>
+
+<!-- /.row -->
+
+<div class="modal fade" id="modal_query_client">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Client Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="frm_edit_client" id="frm_edit_client">
+                <div class="modal-body">
+                    <input type="hidden" id="_client_id" name="_client_id">
+                    <div class="form-group">
+                        <label for="_client_name" class="control-label">Account</label>
+                        <input type="text" class="form-control" id="_client_name"  disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_created_at" class="control-label">Created At</label>
+                        <input type="text" class="form-control" id="_client_created_at" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_updated_at" class="control-label">Updated At</label>
+                        <input type="text" class="form-control" id="_client_updated_at" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_public_key" class="control-label">Public Key</label>
+                        <input type="text" class="form-control" id="_client_public_key"  disabled="disabled">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="_client_allocated_ips" class="control-label">IP Allocation</label>
+                        <input type="text" data-role="tagsinput" class="form-control" id="_client_allocated_ips" disabled="disabled" readonly = "readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="_client_allowed_ips" class="control-label">Allowed IPs</label>
+                        <input type="text" data-role="tagsinput" class="form-control" id="_client_allowed_ips" disabled="disabled" readonly = "readonly">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_port" class="control-label">Port</label>
+                        <input type="text" class="form-control" id="_client_port" name="_client_port" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_post_up" class="control-label">Post Up</label>
+                        <input type="text" class="form-control" id="_client_private_key" name="_client_post_up" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_post_down" class="control-label">Post Down</label>
+                        <input type="text" class="form-control" id="_client_post_down" name="_client_post_down" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_client_listen_ips" class="control-label">Listend IPs</label>
+                        <input type="text" data-role="tagsinput" class="form-control" id="_client_listen_ips" disabled="disabled" readonly = "readonly">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="icheck-primary d-inline">
+                            <input type="checkbox" id="_enabled" disabled="disabled">
+                            <label for="_enabled">
+                                Enable this client
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal_edit_client">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Client</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="frm_edit_client" id="frm_edit_client">
+                <div class="modal-body">
+                    <input type="hidden" id="_client_id" name="_client_id">
+                    <div class="form-group">
+                        <label for="_client_name" class="control-label">Account</label>
+                        <input type="text" class="form-control" id="_client_name" name="_client_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="_client_allocated_ips" class="control-label">IP Allocation</label>
+                        <input type="text" data-role="tagsinput" class="form-control" id="_client_allocated_ips">
+                    </div>
+                    <div class="form-group">
+                        <label for="_client_allowed_ips" class="control-label">Allowed IPs</label>
+                        <input type="text" data-role="tagsinput" class="form-control" id="_client_allowed_ips">
+                    </div>
+                    <div class="form-group">
+                        <div class="icheck-primary d-inline">
+                            <input type="checkbox" id="_enabled">
+                            <label for="_enabled">
+                                Enable this client
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal_remove_client">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Remove</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-dark" id="remove_client_confirm">Apply</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script>
+    function populateClientList() {
+        $.ajax({
+            cache: false,
+            method: 'GET',
+            url: '/wg/list/wgajax',
+            dataType: 'json',
+            contentType: "application/json",
+            success: function (data) {
+                renderClientList(data);
+            },
+            error: function (jqXHR, exception) {
+                const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                toastr.error(responseJson['message']);
+            }
+        });
+    }
+
+    function setClientStatus(clientID, status) {
+        const values = {"account": clientID, "enabled": status};
+        $.ajax({
+            url: '/wg/update/status',
+            async: false,
+            type: 'post',
+            data: {"jsonvalues":JSON.stringify(values)},
+            success: function (data) {
+                location.reload()
+            },
+            error: function (jqXHR, exception) {
+                const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                toastr.error(responseJson['message']);
+            }
+        });
+    }
+
+    function resumeClient(clientID) {
+        setClientStatus(clientID, true);
+        const divElement = document.getElementById("paused_" + clientID);
+        divElement.style.visibility = "hidden";
+    }
+
+    function pauseClient(clientID) {
+        setClientStatus(clientID, false);
+    }
+</script>
+<script>
+    // load client list
+    $(document).ready(function () {
+        populateClientList();
+    })
+
+    // modal_pause_client modal event
+    $("#modal_pause_client").on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const client_id = button.data('clientid');
+        const client_name = button.data('clientname');
+        const modal = $(this);
+        modal.find('.modal-body').text("You are about to disable client " + client_name);
+        modal.find('#pause_client_confirm').val(client_id);
+    })
+
+    // pause_client_confirm button event
+    $(document).ready(function () {
+        $("#pause_client_confirm").click(function () {
+            const client_id = $(this).val();
+            pauseClient(client_id);
+            $("#modal_pause_client").modal('hide');
+        });
+    });
+
+    // modal_remove_client modal event
+    $("#modal_remove_client").on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const client_id = button.data('clientid');
+        const client_name = button.data('clientname');
+        const modal = $(this);
+        modal.find('.modal-body').text("You are about to remove client " + client_name);
+        modal.find('#remove_client_confirm').val(client_id);
+    })
+
+    // remove_client_confirm button event
+    $(document).ready(function () {
+        $("#remove_client_confirm").click(function () {
+            const client_id = $(this).val();
+            $.ajax({
+                url: '/wg/del/wg',
+                async: false,
+                type: 'post',
+                data: {"client-acc":client_id},
+                success: function (data) {
+                    $("#modal_remove_client").modal('hide');
+                    toastr.success('Removed client successfully');
+                    const divElement = document.getElementById('client_' + client_id);
+                    divElement.style.display = "none";
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+
+    // Details of client modal event
+    $(document).ready(function () {
+        $("#modal_query_client").on('shown.bs.modal', function (event) {
+            let modal = $(this);
+            const button = $(event.relatedTarget);
+            const client_id = button.data('clientid');
+
+            // IP Allocation tag input
+            modal.find("#_client_allocated_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': false,
+                'defaultText': 'Add More',
+                'removeWithBackspace': false,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+            // AllowedIPs tag input
+            modal.find("#_client_allowed_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': false,
+                'defaultText': 'Add More',
+                'removeWithBackspace': false,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+            //listen address tags
+            modal.find("#_client_listen_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': false,
+                'defaultText': 'Add More',
+                'removeWithBackspace': false,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+
+            // update client modal data
+            $.ajax({
+                cache: false,
+                method: 'GET',
+                url: '/wg/query/info/' + client_id,
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (resp) {
+
+                    modal.find(".modal-title").text("Client Details");
+                    modal.find("#_client_id").val(resp.account);
+                    modal.find("#_client_name").val(resp.account);
+                    modal.find("#_client_created_at").val(resp.CreatedAt);
+                    modal.find("#_client_updated_at").val(resp.UpdatedAt);
+                    modal.find("#_client_public_key").val(resp.public_key);
+
+
+                    modal.find("#_client_allocated_ips").importTags('');
+                    resp.allocated_ips.forEach(function (obj) {
+                        modal.find("#_client_allocated_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_client_allowed_ips").importTags('');
+                    resp.allowed_ips.forEach(function (obj) {
+                        modal.find("#_client_allowed_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_client_port").val(resp.listen_port);
+                    modal.find("#_client_post_up").val(resp.post_up);
+                    modal.find("#_client_post_down").val(resp.post_down);
+
+                    modal.find("#_client_listen_ips").importTags('');
+                    resp.listen_addresses.forEach(function (obj) {
+                        modal.find("#_client_listen_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_enabled").prop("checked", resp.enabled);
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+
+
+    // Edit client modal event
+    $(document).ready(function () {
+        $("#modal_edit_client").on('shown.bs.modal', function (event) {
+            let modal = $(this);
+            const button = $(event.relatedTarget);
+            const client_id = button.data('clientid');
+
+            // IP Allocation tag input
+            modal.find("#_client_allocated_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': true,
+                'defaultText': 'Add More',
+                'removeWithBackspace': true,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+            // AllowedIPs tag input
+            modal.find("#_client_allowed_ips").tagsInput({
+                'width': '100%',
+                'height': '75%',
+                'interactive': true,
+                'defaultText': 'Add More',
+                'removeWithBackspace': true,
+                'minChars': 0,
+                'maxChars': 18,
+                'placeholderColor': '#666666'
+            });
+
+            // update client modal data
+            $.ajax({
+                cache: false,
+                method: 'GET',
+                url: '/wg/query/info/' + client_id,
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (resp) {
+
+                    modal.find(".modal-title").text("Edit Client");
+                    modal.find("#_client_id").val(resp.account);
+                    modal.find("#_client_name").val(resp.account);
+                    modal.find("#_client_allocated_ips").importTags('');
+                    resp.allocated_ips.forEach(function (obj) {
+                        modal.find("#_client_allocated_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_client_allowed_ips").importTags('');
+                    resp.allowed_ips.forEach(function (obj) {
+                        modal.find("#_client_allowed_ips").addTag(obj.ip_address);
+                    });
+
+                    modal.find("#_enabled").prop("checked", resp.enabled);
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+
+    // submitEditClient function for updating an existing client
+    function submitEditClient() {
+        const name = $("#_client_name").val();
+        const allocated_ips = $("#client_allocated_ips").val().split(",");
+        var allocated_ips_array = []
+        for (i = 0; i < allocated_ips.length; i++) {
+            var allocated_ip = {ip_address: allocated_ips[i]};
+            allocated_ips_array.push(allocated_ip)
+        }
+
+
+        const allowed_ips = $("#client_allowed_ips").val().split(",");
+        var allowed_ips_array = []
+        for (i = 0; i < allowed_ips.length; i++) {
+            var allowed_ip = {ip_address: allowed_ips[i]};
+            allowed_ips_array.push(allowed_ip)
+        }
+        let enabled = false;
+        if ($("#enabled").is(':checked')) {
+            enabled = true;
+        }
+        const values = {
+            "account": name, "allocated_ips": allocated_ips_array, "allowed_ips": allowed_ips_array,
+            "enabled": enabled
+        };
+
+        $.ajax({
+            url: '/wg/update/info',
+            async: false,
+            type: 'post',
+            data: {"jsonvalues":JSON.stringify(values)},
+            success: function (resp) {
+                $("#modal_edit_client").modal('hide');
+                toastr.success('Updated client successfully');
+                // Refresh the home page (clients page) after updating successfully
+                location.reload();
+            },
+            error: function (jqXHR, exception) {
+                const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                toastr.error(responseJson['message']);
+            }
+        });
+    }
+
+    // Edit client form validation
+    $(document).ready(function () {
+        $.validator.setDefaults({
+            submitHandler: function () {
+                submitEditClient();
+            }
+        });
+        $("#frm_edit_client").validate({
+            rules: {
+                client_name: {
+                    required: true,
+                },
+                client_email: {
+                    required: true,
+                    email: true,
+                },
+            },
+            messages: {
+                client_name: {
+                    required: "Please enter a name"
+                },
+                client_email: {
+                    required: "Please enter an email address",
+                    email: "Please enter a valid email address"
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
+</script>

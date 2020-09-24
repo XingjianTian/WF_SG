@@ -1,0 +1,99 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <h5 class="box-title">点击表头排序，再次点击逆序</h5>
+
+                <!--
+                <style>#tableSort{moz-user-select: -moz-none;-moz-user-select: none;-o-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none;border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;width: 100%;text-align: center;margin:15px 0;}
+                    #tableSort th{cursor: pointer; background: #eee}
+                    #tableSort tr:nth-child(even){background: #f9f9f9}
+                    #tableSort th,#tableSort td{padding: 10px; border:1px solid #ccc;}
+                </style>
+                -->
+                <style>
+                    #tableSort th{cursor: pointer;}
+                </style>
+
+                <table class="table table-bordered" id="tableSort">
+                    <thead><tr>
+                        <!-- <th data-type="num">序号</th> -->
+                        <th data-type="num">表单ID</th>
+                        <th data-type="string">表单名称</th>
+                        <th>表单状态</th>
+                        <th data-type="string">单位工程名称</th>
+                        <th data-type="string">分部工程名称</th>
+                        <th data-type="string">分项工程名称</th>
+                        <th data-type="string">检验批部位名称</th>
+                        <th data-type="date">创建时间</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{range $i, $v := .list}}
+                    <tr>
+                        <!--<td>{{$i}}</td>-->
+                        <td>{{$v.RealID}}</td>
+                        <td>{{$v.TName}}</td>
+                        <td>{{$v.State}}</td>
+                        <td>{{$v.OrgEngineeringName}}</td>
+                        <td>{{$v.DepEngineeringName}}</td>
+                        <td>{{$v.SubEngineeringName}}</td>
+                        <td>{{$v.TestPart}}</td>
+                        <td>{{$v.CreatedTimeWeb}}</td>
+                        <td>
+                            <a href="/Table/query/table/{{$v.TID}}"><span class="label label-primary">表单详细信息</span></a>
+                        </td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+
+                <script>
+                    ;(function(){
+                        var tbody = document.querySelector('#tableSort').tBodies[0];
+                        var th = document.querySelector('#tableSort').tHead.rows[0].cells;
+                        var td = tbody.rows;
+                        for(var i = 0;i < th.length;i++){
+                            th[i].flag = 1;
+                            th[i].onclick = function(){
+                                sort(this.getAttribute('data-type'),this.flag,this.cellIndex);
+                                this.flag = -this.flag;
+                            };
+                        };
+                        function sort(str,flag,n){
+                            var arr = [];
+                            for(var i = 0;i < td.length;i++){
+                                arr.push(td[i]);
+                            };
+                            arr.sort(function(a,b){
+                                return method(str,a.cells[n].innerHTML,b.cells[n].innerHTML) * flag;
+                            });
+                            for(var i = 0;i < arr.length;i++){
+                                tbody.appendChild(arr[i]);
+                            };
+                        };
+                        function method(str,a,b){
+                            switch(str){
+                                case 'num':
+                                    return a-b;
+                                    break;
+                                case 'string':
+                                    return a.localeCompare(b);
+                                    break;
+                                default:
+                                    return new Date(a.split('-').join('/')).getTime()-new Date(b.split('-').join('/')).getTime();
+                            };
+                        };
+                    })();
+                </script>
+            </div>
+            <!-- /.box-body -->
+
+
+
+
+        </div>
+    </div>
+</div>

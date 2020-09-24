@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- 下面这行代码标定了编码方式，为了防止在某些浏览器中中文乱码的问题-->
+    <meta charset="utf-8">
+    <!--<title>图片居中问题</title> -->
+
+    <style type="text/css">
+        html,body {
+            height: 100%;
+            width:100%
+        }
+        *{margin: 0;padding:0;}
+        div{
+            position: relative;
+        }
+        img {
+            height: 100%;
+            width: 40%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div style="background: white; height:50%; width: 100%;">
+    <img src="/public/images/bg.png"/>
+</div>
+
+<div align="center">
+    <h1>Smart Grid System</h1>
+    <br>
+    <br>
+</div>
+
+<div align="center" >
+    <a href="/login"><button class="btn btn-danger btn btn-lg">Login</button></a>
+</div>
+
+
+</body>
+</html>

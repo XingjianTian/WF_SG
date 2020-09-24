@@ -1,0 +1,24 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <div class="box">
+        <!-- general form elements -->
+        <div class="box-body">
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form enctype="multipart/form-data" action="/Table/add/table" method="POST">
+                <h4 class="box-title">
+                    <input type="file" name="uploadfile"/>
+                </h4>
+                <input type="hidden" name="token" value="{{.}}"/>
+                <h3 class="box-title">
+                    <button type="submit" class="btn btn-primary">上传文件</button>
+                </h3>
+            </form>
+        </div>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="col-md-12">
+
+        <h4 class="content-max-width">表单历史记录</h4>
+        <div class="box">
+
+            <table class="table table-bordered" id="tableHistoryList">
+                <thead>
+                <tr>
+                    <!-- <th data-type="num">序号</th> -->
+                    <th data-type="num">表单ID</th>
+                    <th data-type="string">表单名称</th>
+                    <th data-type="string">操作人员</th>
+                    <th data-type="string">所属组织</th>
+                    <th data-type="date">签名时间</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range $i, $v := .tableHistory}}
+                    <tr>
+                        <!--<td>{{$i}}</td>-->
+                        <td>{{$v.RealID}}</td>
+                        <td>{{$v.TName}}</td>
+                        <td>{{$v.Operator}}</td>
+                        <td>{{$v.OrgName}}</td>
+                        <td>{{$v.CreatedTimeWeb}}</td>
+                    </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+
+
+        <h4 class="content-max-width">区块信息</h4>
+
+        <div class="box">
+
+            <div class="box-body">
+                <div class="col-md-2 col-sm-6 col-xs-12">
+                    <div class="callout callout-danger">
+                        <h4>区块高度</h4>
+                        <p>{{.blockNumber}}</p>
+                    </div>
+                </div>
+
+                <div class="col-md-5 col-sm-6 col-xs-12">
+                    <div class="callout callout-warning">
+                        <h4>当前块Hash</h4>
+                        <p>{{.blockCurHash}}</p>
+                    </div>
+                </div>
+
+                <div class="col-md-5 col-sm-6 col-xs-12">
+                    <div class="callout callout-info">
+                        <h4>父块Hash</h4>
+                        <p>{{.blockPreHash}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <h4 class="content-max-width">表单详细内容</h4>
+
+        <div class="box">
+
+            <div class="box-body">
+
+
+                <div class="jsonform-disabled">
+                    <form></form>
+                </div>
+
+                <div id="res" class="box-header with-border"></div>
+                <script type="text/javascript" src="/public/jsonform/deps/jquery.min.js"></script>
+                <script type="text/javascript" src="/public/jsonform/deps/underscore.js"></script>
+                <script type="text/javascript" src="/public/jsonform/deps/opt/jsv.js"></script>
+                <script src="/public/jsonform/lib/jsonform.js"></script>
+                <script type="text/javascript">
+
+                    let FormatStr = {{.tableFormatDisabledStr}};
+                    var t = JSON.parse(FormatStr);
+
+                    let ValuesStr = {{.tableValuesStr}};
+                    var v = JSON.parse(ValuesStr)
+                    $('form').jsonForm({
+                        form: t.form,
+                        schema: t.schema,
+                        form: t.form,
+                        value: v,
+                        onSubmit: function (errors,values) {
+                            if (errors) {
+                                $('#res').html('<p>未知问题</p>');
+                            } else {
+                                //$('form').action = "/Table/add/table/Manually";
+                                //window.location.href = "/Table";
+                                $.ajax({
+                                    url: "/Table/add/signtable",
+                                    data: {"jsonvalues":JSON.stringify(values)},
+                                    type: "post",
+                                    async: false,
+                                    success: function (obj) {
+                                        let str = obj.toString();
+                                        if (str === "/Table") {
+                                            window.location.href = str
+                                        } else {
+                                            alert(str);
+                                        }
+
+                                    }
+                                });
+
+
+                            }
+                        }
+                    });
+                </script>
+                <!-- /.box-header -->
+                <!-- form start -->
+
+
+                <!-- /.box-body -->
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
