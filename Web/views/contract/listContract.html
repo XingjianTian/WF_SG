@@ -1,10 +1,201 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class = "card-header">
+                <h5 class="card-title"><em>click the table head to sort</em></h5>
+            </div>
+            <div class="card-body">
+                <style>
+                    #contractSort th{cursor: pointer;}
+                </style>
+                <table class="table table-bordered" id="contractSort">
+                    <thead><tr>
+                        <th data-type="string">ID</th>
+                        <th data-type="string">Contract Name</th>
+                        <th data-type="num">Version</th>
+                        <th data-type="string">Company</th>
+                        <th data-type="string">Energy Type</th>
+                        <th data-type="num">Energy Price</th>
+                        <th data-type="num">Lasting</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {{range $i, $v := .list}}
+                        <tr>
+                            <td>{{$v.ContractId}}</td>
+                            <td>{{$v.ContratName}}</td>
+                            <td>{{$v.ContractVersion}}</td>
+                            <td>{{$v.ContractCompanyName}}</td>
+                            <td>{{$v.EnergyType}}</td>
+                            <td>{{$v.EnergyPrice}}</td>
+                            <td>{{$v.ContractLastTime}}</td>
+                            <td>
+                                <a href="#"><span class="badge badge-info" data-toggle="modal"
+                                                  data-target="#modal_query_contract" data-clientid={{$v.ContractId}}>
+                                    Details
+                                </span></a>
+                            </td>
+                        </tr>
+                    {{end}}
+
+                    </tbody>
+                </table>
+
+                <script>
+                    ;(function(){
+                        var tbody = document.querySelector('#contractSort').tBodies[0];
+                        var th = document.querySelector('#contractSort').tHead.rows[0].cells;
+                        var td = tbody.rows;
+                        for(var i = 0;i < th.length;i++){
+                            th[i].flag = 1;
+                            th[i].onclick = function(){
+                                sort(this.getAttribute('data-type'),this.flag,this.cellIndex);
+                                this.flag = -this.flag;
+                            };
+                        };
+                        function sort(str,flag,n){
+                            var arr = [];
+                            for(var i = 0;i < td.length;i++){
+                                arr.push(td[i]);
+                            };
+                            arr.sort(function(a,b){
+                                return method(str,a.cells[n].innerHTML,b.cells[n].innerHTML) * flag;
+                            });
+                            for(var i = 0;i < arr.length;i++){
+                                tbody.appendChild(arr[i]);
+                            };
+                        };
+                        function method(str,a,b){
+                            switch(str){
+                                case 'num':
+                                    return a-b;
+                                    break;
+                                case 'string':
+                                    return a.localeCompare(b);
+                                    break;
+                                case 'invest':
+                                    return Number(a.split(' ',1))-Number(b.split(' ',1));
+                                    break;
+
+                                case 'size':
+                                    return Number(a.split('-',1))-Number(b.split('-',1));
+                                    break;
+                                case 'date':
+                                    return new Date(a.split('-').join('/')).getTime()-new Date(b.split('-').join('/')).getTime();
+                                    break;
+                                default:
+                                    return 0;
+                                    break;
+
+                            };
+                        };
+                    })();
+                </script>
+
+
+            </div>
+            {{.PageHtml | strToHtml}}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_query_contract">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Contract Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="frm_edit_client" id="frm_edit_client">
+                <div class="modal-body">
+                    <input type="hidden" id="_client_id" name="_client_id">
+                    <div class="form-group">
+                        <label class="control-label">Contract Id</label>
+                        <input type="text" class="form-control" id="_contract_id"  disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Contract Name</label>
+                        <input type="text" class="form-control" id="_contract_name" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Version</label>
+                        <input type="text" class="form-control" id="_contract_version" disabled="disabled">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Company</label>
+                        <input type="text" class="form-control" id="_contract_company" disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="control-label">Details</label>
+                        <input type="text" class="form-control" id="_contract_details"  disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="control-label">Energy Type</label>
+                        <input type="text" class="form-control" id="_energy_type"  disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Energy Price</label>
+                        <input type="text" class="form-control" id="_energy_price"  disabled="disabled">
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="control-label">Lasting</label>
+                        <input type="text" class="form-control" id="_contract_last"  disabled="disabled">
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    // Details of client modal event
+    $(document).ready(function () {
+        $("#modal_query_contract").on('shown.bs.modal', function (event) {
+            let modal = $(this);
+            const button = $(event.relatedTarget);
+            const client_id = button.data('clientid');
+
+            // update client modal data
+            $.ajax({
+                cache: false,
+                method: 'GET',
+                url: '/contract/query/info/' + client_id,
+                dataType: 'json',
+                contentType: "application/json",
+                success: function (resp) {
+
+                    modal.find(".modal-title").text("Client Details");
+                    modal.find("#_contract_id").val(resp.contract_id);
+                    modal.find("#_contract_name").val(resp.contract_name);
+                    modal.find("#_contract_version").val(resp.contract_version);
+                    modal.find("#_contract_company").val(resp.contract_company_name);
+                    modal.find("#_energy_type").val(resp.energy_type);
+                    modal.find("#_energy_price").val(resp.energy_price);
+                    modal.find("#_contract_last").val(resp.contract_last_time);
+
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+</script>

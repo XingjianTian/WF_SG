@@ -12,6 +12,7 @@ import (
 var userModel models.UserModel
 var companyModel models.CompanyModel
 var wgModel models.WgModel
+var contractModel models.ContractModel
 
 type SystemController struct {
 	Ctx     iris.Context

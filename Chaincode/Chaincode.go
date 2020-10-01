@@ -7,9 +7,8 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 	//"strconv"
-	ds "WF_SG/DataStructure"
 	sig "WF_SG/Utils"
-	"strings"
+	"WF_SG/Web/models"
 )
 
 type SmartContract struct {
@@ -23,16 +22,14 @@ func (t *SmartContract) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("Chaincode Invoke")
 
 	function, args := stub.GetFunctionAndParameters()
-	if function == "addTable" {
-		return t.addTable(stub, args)
-	} else if function == "searchTableById" {
-		return t.searchTableById(stub, args)
-	} else if function == "searchTxIDByTableId" {
-		return t.searchTxIDByTableId(stub, args)
-	} else if function == "queryAllTables" {
-		return t.queryAllTables(stub)
-	} else if function == "queryAllTablesWithoutExclude" {
-		return t.queryAllTablesWithoutExclude(stub)
+	if function == "addContract" {
+		return t.addContract(stub, args)
+	} else if function == "searchTxIDByContractId" {
+		return t.SearchTxIDByKey(stub, args)
+	} else if function == "queryContractByKey" {
+		return t.queryContractByKey(stub, args)
+	} else if function == "queryAllContracts" {
+		return t.queryAllContracts(stub)
 	}
 
 	return shim.Error("Invalid SmartContract function name")
@@ -45,88 +42,76 @@ func main() {
 }
 
 //read json, make table, add table
-func (t *SmartContract) addTable(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SmartContract) addContract(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// args[0] are already json, args[1] is userid
 
-	tableAsJsonBytes := []byte(args[0])
-	userid := args[1]
+	contractAsJsonBytes := []byte(args[0])
+	//contractKey = "contract-"+contract.ContractId +"-"+contract.ContractVersion)
+	contractKey := args[1]
 
-	var table ds.Table
-	var tableBeforeSig ds.Table
+	var contract models.ContractModel
+	var contractBeforeSig models.ContractModel
 
 	//change pcheckResult and remarshal
 
-	err := json.Unmarshal(tableAsJsonBytes, &table)
-	table.CheckAllPropertyValue()
+	err := json.Unmarshal(contractAsJsonBytes, &contractBeforeSig)
+	err = json.Unmarshal(contractAsJsonBytes, &contract)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
+	contractBeforeSig.ContractCompanySig = ""
 
-	err = json.Unmarshal(tableAsJsonBytes, &tableBeforeSig)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	lastSignature := table.Sig[len(table.Sig)-1]
-
-	if len(table.Sig) == 1 {
-		tableBeforeSig.Sig = nil
-	} else {
-		tableBeforeSig.Sig = table.Sig[:len(table.Sig)-1]
-	}
-
-	tableBeforeSigAsJsonBytes, err := json.Marshal(tableBeforeSig)
+	contractBeforeSigAsJsonBytes, err := json.Marshal(contractBeforeSig)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//use public key to verify
-	bVerified, _ := sig.Verify(tableBeforeSigAsJsonBytes, lastSignature, userid)
+	bVerified, _ := sig.Verify(contractBeforeSigAsJsonBytes, contract.ContractCompanySig, contract.ContractCompanyName)
 	if bVerified {
-		fmt.Println("user: " + userid + " verified ok")
+		fmt.Println("contract verified ok")
 	} else {
-		return shim.Error("user " + userid + " fail to verify")
+		return shim.Error("contract failed to verify")
 	}
 
 	//check if table and prior tables exist
-	allTableIds := queryAllTableIds(stub)
-	for _, id := range allTableIds {
-		if id == table.TId {
+	allContractKeys := queryAllContractKeys(stub)
+	for _, id := range allContractKeys {
+		if id == contractKey {
 			return shim.Error("table " + id + " already exists")
 		}
 	}
 
 	//create composite key for PutStates(), as main key
-	tableIdKey, err := stub.CreateCompositeKey("Table", []string{"_TId", table.TId})
+	contractIdKey, err := stub.CreateCompositeKey("Table", []string{"_TId", contractKey})
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//remarshal after changing pcheckresult
-	tableAsJsonBytes, err = json.Marshal(table)
-	err = stub.PutState(tableIdKey, tableAsJsonBytes)
+	err = stub.PutState(contractIdKey, contractAsJsonBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	err = stub.SetEvent("eventAddTable", []byte(table.TId))
+	err = stub.SetEvent("eventAddTable", []byte(contractKey))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	payload := []byte("table id: " + table.TId + " successfully added")
+	payload := []byte("table id: " + contractKey + " successfully added")
 	return shim.Success(payload)
 }
 
 //require all table id
-func queryAllTableIds(stub shim.ChaincodeStubInterface) []string {
+func queryAllContractKeys(stub shim.ChaincodeStubInterface) []string {
 	//composite key query
-	cKeyIter, err := stub.GetStateByPartialCompositeKey("Table", []string{"_TId"})
+	cKeyIter, err := stub.GetStateByPartialCompositeKey("Table", []string{"_Id"})
 	if err != nil {
 		return nil
 	}
 	defer cKeyIter.Close()
-	tableIds := make([]string, 0)
+	contractKeys := make([]string, 0)
 
 	//iteration
 	for i := 0; cKeyIter.HasNext(); i++ {
@@ -138,23 +123,22 @@ func queryAllTableIds(stub shim.ChaincodeStubInterface) []string {
 		if err != nil {
 			return nil
 		}
-		tableId := cKeyParts[1]
-		tableIds = append(tableIds, tableId)
+		contractKey := cKeyParts[1]
+		contractKeys = append(contractKeys, contractKey)
 	}
 
-	return tableIds
+	return contractKeys
 }
 
-func (t *SmartContract) searchTxIDByTableId(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SmartContract) SearchTxIDByKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) < 1 {
 		return shim.Error("Args wrong, expecting 1 like (table_Id)")
 	}
-	tableIdAsStr := args[0]
 	//use composite key to search
-	tableIdKey, _ := stub.CreateCompositeKey("Table", []string{"_TId", tableIdAsStr})
+	contractKey, _ := stub.CreateCompositeKey("Table", []string{"_TId", args[0]})
 
-	resultsIterator, err := stub.GetHistoryForKey(tableIdKey)
+	resultsIterator, err := stub.GetHistoryForKey(contractKey)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -171,100 +155,63 @@ func (t *SmartContract) searchTxIDByTableId(stub shim.ChaincodeStubInterface, ar
 		TxID = response.TxId
 	}
 
-	//payload:= append([]byte("table id " + tableIdAsStr + " successfully queried, the json is: "),tableAsBytes...)
+	//payload:= append([]byte("table id " + contractKey + " successfully queried, the json is: "),tableAsBytes...)
 	return shim.Success([]byte(TxID))
 
 }
 
-func (t *SmartContract) searchTableById(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SmartContract) queryContractByKey(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) < 1 {
-		return shim.Error("Args wrong, expecting 1 like (table_Id)")
+		return shim.Error("Args wrong, expecting 1 like (contract_Id)")
 	}
-	tableIdAsStr := args[0]
 
 	//use composite key to search
-	tableIdKey, _ := stub.CreateCompositeKey("Table", []string{"_TId", tableIdAsStr})
-	tableAsBytes, err := stub.GetState(tableIdKey)
+	contractKey, _ := stub.CreateCompositeKey("Table", []string{"_TId", args[0]})
+	contractAsBytes, err := stub.GetState(contractKey)
 	if err != nil {
-		return shim.Error("Failed to get table info:" + err.Error())
-	} else if tableAsBytes == nil {
-		return shim.Error("Table does not exist")
+		return shim.Error("Failed to get contract info:" + err.Error())
+	} else if contractAsBytes == nil {
+		return shim.Error("Contract does not exist")
 	}
-	fmt.Printf("Search Response: %s\n", string(tableAsBytes))
+	fmt.Printf("Search Response: %s\n", string(contractAsBytes))
 
 	//payload:= append([]byte("table id " + tableIdAsStr + " successfully queried, the json is: "),tableAsBytes...)
-	return shim.Success(tableAsBytes)
+	return shim.Success(contractAsBytes)
 }
-func (t *SmartContract) queryAllTables(stub shim.ChaincodeStubInterface) pb.Response {
+func (t *SmartContract) queryAllContracts(stub shim.ChaincodeStubInterface) pb.Response {
 
-	fmt.Println("queryAllTables")
+	fmt.Println("queryAllContracts")
 	//composite key query
-	cKeyIter, err := stub.GetStateByPartialCompositeKey("Table", []string{"_TId"})
+	cKeyIter, err := stub.GetStateByPartialCompositeKey("Table", []string{"_Id"})
 	if err != nil {
-		fmt.Println("error000")
+		fmt.Println("error")
 		return shim.Error(err.Error())
 	}
 	defer cKeyIter.Close()
 
-	tablesMap := make(map[string]ds.TableForWebinCC)
+	contractsMap := make(map[string]models.ContractModel)
 
 	//iteration
 	for i := 0; cKeyIter.HasNext(); i++ {
 		responseRange, err := cKeyIter.Next()
 		if err != nil {
-			fmt.Println("error1")
+			fmt.Println("error")
 			return shim.Error(err.Error())
 		}
-		var table ds.Table
-		err = json.Unmarshal(responseRange.Value, &table)
+		var contract models.ContractModel
+		err = json.Unmarshal(responseRange.Value, &contract)
 		if err != nil {
-			fmt.Println("error2")
+			fmt.Println("error")
 			return shim.Error(err.Error())
 		}
 
-		var tempState string
-		var orgnization string
-		if strings.Contains(table.LastSigner, "builder") {
-			tempState = "等待Supervisor签名"
-			orgnization = "builder"
-		} else if strings.Contains(table.LastSigner, "supervisor") {
-			tempState = "等待Constructor签名"
-			orgnization = "supervisor"
-		} else if strings.Contains(table.LastSigner, "constructor") {
-			tempState = "已完成"
-			orgnization = "constructor"
-		}
-
-		fmt.Println("Thestate is", tempState)
-
-		tableForWeb := ds.TableForWebinCC{
-			TID:                table.TId,
-			TName:              table.TName,
-			OrgEngineeringName: table.TCommon.OrgEngineeringName,
-			DepEngineeringName: table.TCommon.DepEngineeringName,
-			SubEngineeringName: table.TCommon.SubEngineeringName,
-			TestPart:           table.TCommon.TestPart,
-			State:              tempState,
-			CreatedAt:          table.TimeStamp,
-			Operator:           table.LastSigner,
-			OrgName:            orgnization,
-		}
-		//tablesForWebInit = append(tablesForWebInit,tableForWeb)
-
-		/*查看元素在集合中是否存在 */
-
-		realID := ds.AiteBefore(table.TId)
-		fmt.Println("realid is", realID)
-
-		_, ok := tablesMap[realID] /*如果确定是真实的,则存在,否则不存在 */
+		_, ok := contractsMap[contract.ContractId] /*如果确定是真实的,则存在,否则不存在 */
 		/*fmt.Println(capital) */
 		/*fmt.Println(ok) */
 		if ok {
-			if tableForWeb.CreatedAt.After(tablesMap[realID].CreatedAt) {
-				tablesMap[realID] = tableForWeb
-			}
+			fmt.Println("map created ok")
 		} else {
-			tablesMap[realID] = tableForWeb
+			fmt.Println("failed to create map")
 		}
 
 		if err != nil {
@@ -272,98 +219,9 @@ func (t *SmartContract) queryAllTables(stub shim.ChaincodeStubInterface) pb.Resp
 		}
 	}
 
-	payload, _ := json.Marshal(FormatTablesForWeb(tablesMap))
+	payload, _ := json.Marshal(contractsMap)
 
 	fmt.Println("payload is", string(payload))
 
 	return shim.Success(payload)
 }
-
-func (t *SmartContract) queryAllTablesWithoutExclude(stub shim.ChaincodeStubInterface) pb.Response {
-
-	fmt.Println("queryAllTablesWithoutExclude")
-	//composite key query
-	cKeyIter, err := stub.GetStateByPartialCompositeKey("Table", []string{"_TId"})
-	if err != nil {
-		fmt.Println("error000")
-		return shim.Error(err.Error())
-	}
-	defer cKeyIter.Close()
-
-	var tablesList []ds.TableForWebinCC
-
-	//iteration
-	for i := 0; cKeyIter.HasNext(); i++ {
-		responseRange, err := cKeyIter.Next()
-		if err != nil {
-			fmt.Println("error1")
-			return shim.Error(err.Error())
-		}
-		var table ds.Table
-		err = json.Unmarshal(responseRange.Value, &table)
-		if err != nil {
-			fmt.Println("error2")
-			return shim.Error(err.Error())
-		}
-
-		var tempState string
-		var orgnization string
-		if strings.Contains(table.LastSigner, "builder") {
-			tempState = "等待Supervisor签名"
-			orgnization = "builder"
-		} else if strings.Contains(table.LastSigner, "supervisor") {
-			tempState = "等待Constructor签名"
-			orgnization = "supervisor"
-		} else if strings.Contains(table.LastSigner, "constructor") {
-			tempState = "已完成"
-			orgnization = "constructor"
-		}
-
-		fmt.Println("Thestate is", tempState)
-
-		tableForWeb := ds.TableForWebinCC{
-			TID:                table.TId,
-			TName:              table.TName,
-			OrgEngineeringName: table.TCommon.OrgEngineeringName,
-			DepEngineeringName: table.TCommon.DepEngineeringName,
-			SubEngineeringName: table.TCommon.SubEngineeringName,
-			TestPart:           table.TCommon.TestPart,
-			State:              tempState,
-			CreatedAt:          table.TimeStamp,
-			Operator:           table.LastSigner,
-			OrgName:            orgnization,
-		}
-		//tablesForWebInit = append(tablesForWebInit,tableForWeb)
-
-		/*查看元素在集合中是否存在 */
-
-		comma := strings.Index(table.TId, "@")
-		realID := table.TId[0:comma]
-		fmt.Println("realid is", realID)
-		tableForWeb.RealID = realID
-
-		tablesList = append(tablesList, tableForWeb)
-
-	}
-
-	payload, _ := json.Marshal(tablesList)
-
-	fmt.Println("payload is", string(payload))
-
-	return shim.Success(payload)
-}
-
-func FormatTablesForWeb(tablesMap map[string]ds.TableForWebinCC) []ds.TableForWebinCC {
-
-	var result []ds.TableForWebinCC
-
-	for k, v := range tablesMap {
-		temp := v
-		temp.RealID = k
-		result = append(result, temp)
-	}
-	return result
-
-}
-
-//customize searching, given id,output container or property

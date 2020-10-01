@@ -13,7 +13,6 @@ import (
 
 type CompanyModel struct {
 	gorm.Model
-	//ID       uint    `gorm:"primary_key;auto_increment"`
 	CompanyName         string `gorm:"type:varchar(50);not null;"`
 	CompanyOwnerAccount string `gorm:"type:varchar(50);not null;"`
 	CompanyBuildYear    string `gorm:"type:char(32);not null;"`
