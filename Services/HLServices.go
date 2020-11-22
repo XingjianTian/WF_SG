@@ -3,7 +3,7 @@ package Services
 import (
 	ds "WF_SG/DataStructure"
 	sig "WF_SG/Utils"
-	"WF_SG/Web/models"
+	//"WF_SG/Web/models"
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-protos-go/common"
@@ -165,7 +165,7 @@ func (t *ServiceSetup) AddContractService(contractJson []byte) (string, error) {
 	reg, notifer := eventRegister(cli, t.ChaincodeID, eventID)
 	defer cli.UnregisterChaincodeEvent(reg)
 
-	var contract models.ContractModel
+	var contract ds.ContractInfo
 	err := json.Unmarshal(contractJson, &contract)
 	if err != nil {
 		return "", err

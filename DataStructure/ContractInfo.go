@@ -1,9 +1,14 @@
 package DataStructure
 
 type ContractInfo struct {
-	ContractName    string  `json:"contract_name"`
-	ContractCompany string  `json:"contract_company"`
-	ContractDetails string  `json:"contract_details"`
-	EnergyType      string  `json:"energy_type"`
-	EnergyPricePerW float64 `json:"energy_pricePerW"`
+	ContractId      string
+	ContractVersion string
+	//fabric key:id+"-"+version
+	ContractName        string
+	ContractCompanyName string
+	ContractCompanySig  string
+	ContractDetails     string
+	EnergyType          string
+	EnergyPrice         string
+	ContractLastTime    string
 }
