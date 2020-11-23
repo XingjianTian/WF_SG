@@ -35,6 +35,11 @@ func Routes(app *iris.Application) {
 		Register(common.SessManager.Start).
 		Handle(new(controllers.TableController))
 
+	//ied management
+	mvc.New(app.Party("/ied", middlewares.SessionLoginAuth)).
+		Register(common.SessManager.Start).
+		Handle(new(controllers.IedController))
+
 	//company management
 	mvc.New(app.Party("/company", middlewares.SessionLoginAuth)).
 		Register(common.SessManager.Start).
@@ -45,4 +50,8 @@ func Routes(app *iris.Application) {
 		Register(common.SessManager.Start).
 		Handle(new(controllers.WgController))
 
+	//contract management
+	mvc.New(app.Party("/contract", middlewares.SessionLoginAuth)).
+		Register(common.SessManager.Start).
+		Handle(new(controllers.ContractController))
 }

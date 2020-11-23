@@ -19,9 +19,12 @@ func (c *ContractController) GetListContract() mvc.View {
 	if err != nil || page < 1 {
 		page = 1
 	}
-	list, total, totalPages := contractModel.ContractList(page)
+	list, total, totalPages, err := contractModel.ContractList(page)
+	if err != nil {
+		return common.MvcError(err.Error(), c.Ctx)
+	}
 	return mvc.View{
-		Name: "company/listContract.html",
+		Name: "contract/listContract.html",
 		Data: iris.Map{
 			"Title":    "List of Contracts",
 			"list":     list,
@@ -32,7 +35,7 @@ func (c *ContractController) GetListContract() mvc.View {
 }
 func (c *ContractController) GetAddContract() mvc.View {
 	return mvc.View{
-		Name: "company/addContract.html",
+		Name: "contract/addContract.html",
 		Data: iris.Map{
 			"Title": "Add Contract",
 		},

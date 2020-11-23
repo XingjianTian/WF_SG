@@ -39,7 +39,7 @@ func (this *ContractModel) ContractInfo(contractId string) (ContractModel, fab.T
 
 	return contract, txID, nil
 }
-func (this *ContractModel) ContractList(page int) ([]ContractModel, int, int) {
+func (this *ContractModel) ContractList(page int) ([]ContractModel, int, int, error) {
 	var data []ContractModel
 	var totalCount int
 	limit := config.GetInt("pagination.PageSize")
@@ -52,7 +52,7 @@ func (this *ContractModel) ContractList(page int) ([]ContractModel, int, int) {
 	totalCount = len(data)
 	totalPages := int(math.Ceil(float64(totalCount) / float64(limit)))
 
-	return data, totalCount, totalPages
+	return data, totalCount, totalPages, err
 }
 func (this *ContractModel) ContractAdd(postValues map[string][]string, filePath string, acc string) error {
 

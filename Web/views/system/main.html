@@ -2,7 +2,7 @@
 <div class="row">
     <div class="card col-md-6 col-sm-6 col-xs-12">
         <div class="card-header">
-            <h3 class="card-title">Network Flows</h3>
+            <h3 class="card-title">This week's network flows</h3>
             <div class="card-body">
                 <canvas id="lineChart"></canvas>
             </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="card col-md-6 col-sm-6 col-xs-12">
         <div class="card-header">
-            <h3 class="card-title">Default Card Example</h3>
+            <h3 class="card-title">Energy Type Distribution</h3>
             <div class="card-body">
                 <canvas id="doughnutChart"></canvas>
             </div>
@@ -107,10 +107,10 @@
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: '# of GBs',
+                data: [12, 19, 3, 5, 2, 3,8],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -147,9 +147,9 @@
     var myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: ["Nuclear", "Fire", "Water", "Wind", "Solar", "Tidal"],
             datasets: [{
-                label: '# of Votes',
+                label: '# of Energy Types',
                 data: [12, 19, 3, 5, 2, 3],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',

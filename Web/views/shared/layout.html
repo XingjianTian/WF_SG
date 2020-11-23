@@ -22,11 +22,11 @@
     <!-- Jquery Tags Input -->
     <link rel="stylesheet" href="/node_modules/jquery-tags-input/dist/jquery.tagsinput.min.css">
 
-<!--[endif]-->
+    <!--[endif]-->
     <!-- Google Font -->
 
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="sidebar-mini" style="height: auto;">
 <div class="wrapper">
 
     <!-- Navbar -->
@@ -63,17 +63,14 @@
                             </li>
 
                             <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="/user/update/password" class="btn btn-default btn-flat">Change Password</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="/login/logout" class="btn btn-default btn-flat">Logout</a>
-                                </div>
+                                <a href="/user/update/password" class="btn btn-block btn-primary btn-sm">Change
+                                    Password</a>
+                                <a href="/login/logout" class="btn btn-block btn-danger btn-sm">Logout</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="/user/update/user" ><i class="fa fa-gears"></i></a>
+                        <a href="/user/update/user"><i class="fa fa-gears"></i></a>
                     </li>
                 </ul>
             </div>
@@ -86,208 +83,210 @@
     <!-- Main navbar links -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-        <a href="#" class="brand-link">
-            <!-- <img src="static/dist/img/logo.png" alt="Wireguard UI"
-                class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-            <span class="brand-text font-weight-light">Smart Grid System</span>
+        <a href="/system/main" class="brand-link">
+            <div class="user-panel  mt-3 pb-3 d-flex">
+                <div class="image">
+                    <img src="/public/images/sg-logo.png" class="img-circle">
+                </div>
+                <span class="brand-text font-weight-light"><b>Smart Grid</b></span>
+            </div>
         </a>
 
         <!-- Sidebar -->
         <section class="sidebar">
-            <div class="user-panel  mt-3 pb-3 mb-3 d-flex">
+
+            <div class="user-panel d-flex">
                 <div class="image">
                     <img src="{{.userInfo.Headico}}" class="img-circle" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">{{.userName}}</a>
+                    <a href="#" class="d-block"><i>{{.userName}}</i></a>
                 </div>
             </div>
+
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                <li class="nav-header">MAIN NAVIGATION</li>
-                <li class="nav-item">
-                    <a href="/system/main" class="nav-link">
-                        <i class="nav-icon fa fa-dashcube"></i>
-                        <p>System Main</p>
-                    </a>
-                </li>
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+                    <!--<li class="nav-header">MAIN NAVIGATION</li>-->
+                    <li class="nav-item">
+                        <a href="/system/main" class="nav-link">
+                            <i class="nav-icon fa fa-dashcube"></i>
+                            <p>System Main</p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a href="/IEM" class="nav-link">
-                        <i class="nav-icon fa fa-building"></i>
-                        <p>IEM info</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="/IEM" class="nav-link">
+                            <i class="nav-icon fa fa-building"></i>
+                            <p>IEM info</p>
+                        </a>
+                    </li>
 
-                <!--user tree view-->
-                <li class="nav-item has-treeview" >
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-user"></i>
-                        <p>User</p>
-                        <i class="right fa fa-angle-left"></i>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/user/list/user" class="nav-link active">
-                                <i class="nav-icon fa fa-folder-o"></i>
-                                <p>user List</p>
-                            </a>
-                        </li>
+                    <!--user tree view-->
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-user"></i>
+                            <p>User</p>
+                            <i class="right fa fa-angle-left"></i>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/user/list/user" class="nav-link active">
+                                    <i class="nav-icon fa fa-folder-o"></i>
+                                    <p>user List</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/user/add/user" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>Add user</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/user/add/user" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>Add user</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/user/query/user" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>My Info</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/user/query/user" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>My Info</p>
+                                </a>
+                            </li>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
 
-                <!--IED treeview-->
+                    <!--IED treeview-->
 
-                <li class="nav-item has-treeview" >
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-bolt"></i>
-                        <p>IED</p>
-                        <i class="right fa fa-angle-left"></i>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/IED/list/ied" class="nav-link active">
-                                <i class="nav-icon fa fa-folder-o"></i>
-                                <p>IED List</p>
-                            </a>
-                        </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-bolt"></i>
+                            <p>IED</p>
+                            <i class="right fa fa-angle-left"></i>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/ied/list/ied" class="nav-link active">
+                                    <i class="nav-icon fa fa-folder-o"></i>
+                                    <p>IED List</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/IED/add/ied" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>Add IED</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/ied/add/ied" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>Add IED</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/IED/query/ied" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>My IED</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/ied/query/ied" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>My IED</p>
+                                </a>
+                            </li>
 
-                    </ul>
-                </li>
-
-
+                        </ul>
+                    </li>
 
 
-                <!--wireguard treeview-->
-                <li class="nav-item has-treeview" >
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-wifi"></i>
-                        <p>WireGuard</p>
-                        <i class="right fa fa-angle-left"></i>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/wg/list/wg" class="nav-link active">
-                                <i class="nav-icon fa fa-folder-o"></i>
-                                <p>WireGuard Client List</p>
-                            </a>
-                        </li>
+                    <!--wireguard treeview-->
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-wifi"></i>
+                            <p>WireGuard</p>
+                            <i class="right fa fa-angle-left"></i>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/wg/list/wg" class="nav-link active">
+                                    <i class="nav-icon fa fa-folder-o"></i>
+                                    <p>WG List</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
+                            <li class="nav-item">
 
-                            <a href = "#" class="nav-link active" data-toggle="modal" data-target="#modal_new_client">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>Add WireGuard Instance</p>
-                            </a>
-                        </li>
+                                <a href="#" class="nav-link active" data-toggle="modal" data-target="#modal_new_client">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>Add WG Client</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active" data-toggle="modal"
+                                   data-target="#modal_query_my_client">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>My WG</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href = "#" class="nav-link active" data-toggle="modal" data-target="#modal_query_my_client">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>My WireGuard</p>
-                            </a>
-                        </li>
+                        </ul>
+                    </li>
 
-                    </ul>
-                </li>
+                    <!--company treeview-->
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-briefcase"></i>
+                            <p>Company</p>
+                            <i class="right fa fa-angle-left"></i>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/company/list/company" class="nav-link active">
+                                    <i class="nav-icon fa fa-folder-o"></i>
+                                    <p>Company List</p>
+                                </a>
+                            </li>
 
-                <!--company treeview-->
-                <li class="nav-item has-treeview" >
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-briefcase"></i>
-                        <p>Company</p>
-                        <i class="right fa fa-angle-left"></i>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/company/list/company" class="nav-link active">
-                                <i class="nav-icon fa fa-folder-o"></i>
-                                <p>Company List</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/company/add/company" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>Register</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/company/add/company" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>Regiter Company</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/company/query/company" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>My Company</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/company/query/company" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>My Company</p>
-                            </a>
-                        </li>
+                        </ul>
+                    </li>
 
-                    </ul>
-                </li>
+                    <!--contract treeview-->
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-handshake-o"></i>
+                            <p>Contract</p>
+                            <i class="right fa fa-angle-left"></i>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/contract/list/contract" class="nav-link active">
+                                    <i class="nav-icon fa fa-folder-o"></i>
+                                    <p>Contract List</p>
+                                </a>
+                            </li>
 
-                <!--contract treeview-->
-                <li class="nav-item has-treeview" >
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fa fa-handshake-o"></i>
-                        <p>Contract</p>
-                        <i class="right fa fa-angle-left"></i>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/contract/list/contract" class="nav-link active">
-                                <i class="nav-icon fa fa-folder-o"></i>
-                                <p>Contract List</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/contract/add/contract" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>Offer Contract</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/contract/add/contract" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>Offer Contract</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/contract/query/my" class="nav-link active">
+                                    <i class="nav-icon fa fa-pencil-square-o"></i>
+                                    <p>My Contract</p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a href="/contract/query/my" class="nav-link active">
-                                <i class="nav-icon fa fa-pencil-square-o"></i>
-                                <p>My Contract</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
 
 
-
-            </ul>
+                </ul>
             </nav>
         </section>
     </aside>
@@ -311,7 +310,7 @@
                         <div class="form-group">
                             <label for="client_allocated_ips" class="control-label">IP Allocation</label>
                             <input type="text" data-role="tagsinput" class="form-control" id="client_allocated_ips"
-                                    value = "192.168.0.1/32">
+                                   value="192.168.0.1/32">
                         </div>
                         <div class="form-group">
                             <label for="client_allowed_ips" class="control-label">Allowed IPs</label>
@@ -352,7 +351,7 @@
                         <input type="hidden" id="_client_id" name="_client_id">
                         <div class="form-group">
                             <label for="_client_name" class="control-label">Account</label>
-                            <input type="text" class="form-control" id="_client_name"  disabled="disabled">
+                            <input type="text" class="form-control" id="_client_name" disabled="disabled">
                         </div>
 
                         <div class="form-group">
@@ -367,37 +366,43 @@
 
                         <div class="form-group">
                             <label for="_client_public_key" class="control-label">Public Key</label>
-                            <input type="text" class="form-control" id="_client_public_key"  disabled="disabled">
+                            <input type="text" class="form-control" id="_client_public_key" disabled="disabled">
                         </div>
 
 
                         <div class="form-group">
                             <label for="_client_allocated_ips" class="control-label">IP Allocation</label>
-                            <input type="text" data-role="tagsinput" class="form-control" id="_client_allocated_ips" disabled="disabled" readonly = "readonly">
+                            <input type="text" data-role="tagsinput" class="form-control" id="_client_allocated_ips"
+                                   disabled="disabled" readonly="readonly">
                         </div>
                         <div class="form-group">
                             <label for="_client_allowed_ips" class="control-label">Allowed IPs</label>
-                            <input type="text" data-role="tagsinput" class="form-control" id="_client_allowed_ips" disabled="disabled" readonly = "readonly">
+                            <input type="text" data-role="tagsinput" class="form-control" id="_client_allowed_ips"
+                                   disabled="disabled" readonly="readonly">
                         </div>
 
                         <div class="form-group">
                             <label for="_client_port" class="control-label">Port</label>
-                            <input type="text" class="form-control" id="_client_port" name="_client_port" disabled="disabled">
+                            <input type="text" class="form-control" id="_client_port" name="_client_port"
+                                   disabled="disabled">
                         </div>
 
                         <div class="form-group">
                             <label for="_client_post_up" class="control-label">Post Up</label>
-                            <input type="text" class="form-control" id="_client_private_key" name="_client_post_up" disabled="disabled">
+                            <input type="text" class="form-control" id="_client_private_key" name="_client_post_up"
+                                   disabled="disabled">
                         </div>
 
                         <div class="form-group">
                             <label for="_client_post_down" class="control-label">Post Down</label>
-                            <input type="text" class="form-control" id="_client_post_down" name="_client_post_down" disabled="disabled">
+                            <input type="text" class="form-control" id="_client_post_down" name="_client_post_down"
+                                   disabled="disabled">
                         </div>
 
                         <div class="form-group">
                             <label for="_client_listen_ips" class="control-label">Listend IPs</label>
-                            <input type="text" data-role="tagsinput" class="form-control" id="_client_listen_ips" disabled="disabled" readonly = "readonly">
+                            <input type="text" data-role="tagsinput" class="form-control" id="_client_listen_ips"
+                                   disabled="disabled" readonly="readonly">
                         </div>
 
                         <div class="form-group">
@@ -423,45 +428,46 @@
     <div class="content-wrapper">
 
 
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">
-                                {{.Title}}
-                            </h1>
-                        </div>
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">
+                            {{.Title}}
+                        </h1>
                     </div>
                 </div>
             </div>
-
-
-
-            <!-- Layout sets the layout template file which should use
-            // the { yield } func to yield the main template file
-            // and optionally {partial/partial_r/render} to render
-            // other template files like headers and footers.
-
-            func (s *HTMLEngine) layoutFuncsFor(name string, binding interface{}) {
-	funcs := template.FuncMap{
-		"yield": func() (template.HTML, error) {
-			buf, err := s.executeTemplateBuf(name, binding)
-			// Return safe HTML here since we are rendering our own template.
-			return template.HTML(buf.String()), err
-		},-->
-            {{ yield }}
         </div>
+
+
+        <!-- Layout sets the layout template file which should use
+        // the { yield } func to yield the main template file
+        // and optionally {partial/partial_r/render} to render
+        // other template files like headers and footers.
+
+        func (s *HTMLEngine) layoutFuncsFor(name string, binding interface{}) {
+funcs := template.FuncMap{
+    "yield": func() (template.HTML, error) {
+        buf, err := s.executeTemplateBuf(name, binding)
+        // Return safe HTML here since we are rendering our own template.
+        return template.HTML(buf.String()), err
+    },-->
+            <div class="container-fluid">
+                {{ yield }}
+
+        </div>
+    </div>
 
     <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">
             <b>Version</b> 1.0.0
         </div>
-        <strong>Copyright &copy; 2010-2021 <a href="https://github.com/Rorschache">CCNU-XJT</a>.</strong> All rights
+        <strong>Copyright &copy; 2020-2021 <a href="https://github.com/Rorschache">CCNU-XJT</a>.</strong> All rights
         reserved.
     </footer>
 
-    </div>
-
+</div>
 
 
 <!--[if lt IE 9]-->
@@ -472,8 +478,7 @@
 <script src="/node_modules/admin-lte/plugins/fastclick/fastclick.js"></script>
 <script src="/node_modules/admin-lte/dist/js/adminlte.min.js"></script>
 <!-- Select2 -->
-<script  src="/node_modules/admin-lte/plugins/select2/js/select2.min.js"></script>
-
+<script src="/node_modules/admin-lte/plugins/select2/js/select2.min.js"></script>
 
 
 <script src="/node_modules/admin-lte/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -482,18 +487,14 @@
 <!-- Jquery Tags Input -->
 <script src="/node_modules/jquery-tags-input/dist/jquery.tagsinput.min.js"></script>
 <!-- Custom js -->
-<script  src="/public/jsonform/deps/underscore.js"></script>
-<script  src="/public/jsonform/deps/opt/jsv.js"></script>
-<script  src="/public/jsonform/lib/jsonform.js"></script>
+<script src="/public/jsonform/deps/underscore.js"></script>
+<script src="/public/jsonform/deps/opt/jsv.js"></script>
+<script src="/public/jsonform/lib/jsonform.js"></script>
 <script src="/public/custom/helper.js"></script>
 
 
-
-
-
-
-<script type = "text/javascript" >
-    $(document).ready(function() {
+<script type="text/javascript">
+    $(document).ready(function () {
         $('ul.treeview-menu>li').find('a[href="' + window.location.pathname + '"]').closest('li').addClass('active');
         $('ul.treeview-menu>li').find('a[href="' + window.location.pathname + '"]').closest('li.treeview').addClass('active');
         $('.sidebar-menu>li').find('a[href="' + window.location.pathname + '"]').closest('li').addClass('active');
@@ -524,36 +525,38 @@
     function submitNewClient() {
         const name = $("#client_name").val();
         const allocated_ips = $("#client_allocated_ips").val().split(",");
-        var allocated_ips_array=[]
+        var allocated_ips_array = []
         for (i = 0; i < allocated_ips.length; i++) {
-            var allocated_ip = {ip_address:allocated_ips[i]};
+            var allocated_ip = {ip_address: allocated_ips[i]};
             allocated_ips_array.push(allocated_ip)
         }
 
 
         const allowed_ips = $("#client_allowed_ips").val().split(",");
-        var allowed_ips_array=[]
+        var allowed_ips_array = []
         for (i = 0; i < allowed_ips.length; i++) {
-            var allowed_ip = {ip_address:allowed_ips[i]};
+            var allowed_ip = {ip_address: allowed_ips[i]};
             allowed_ips_array.push(allowed_ip)
         }
         let enabled = false;
-        if ($("#enabled").is(':checked')){
+        if ($("#enabled").is(':checked')) {
             enabled = true;
         }
-        const values = {"account": name, "allocated_ips": allocated_ips_array, "allowed_ips": allowed_ips_array,
-            "enabled": enabled};
+        const values = {
+            "account": name, "allocated_ips": allocated_ips_array, "allowed_ips": allowed_ips_array,
+            "enabled": enabled
+        };
 
         $.ajax({
             url: '/wg/add/wg',
-            data: {"jsonvalues":JSON.stringify(values)},
+            data: {"jsonvalues": JSON.stringify(values)},
             type: "post",
             async: false,
-            success: function() {
+            success: function () {
                 $("#modal_new_client").modal('hide');
                 toastr.success('Created new client successfully');
             },
-            error: function(jqXHR, exception) {
+            error: function (jqXHR, exception) {
                 const responseJson = jQuery.parseJSON(jqXHR.responseText);
                 toastr.error(responseJson['message']);
             }
@@ -706,7 +709,6 @@
             });
 
 
-
             // update client modal data
             $.ajax({
                 cache: false,
@@ -763,11 +765,11 @@
                 url: '/api/apply-wg-config',
                 dataType: 'json',
                 contentType: "application/json",
-                success: function(data) {
+                success: function (data) {
                     $("#modal_apply_config").modal('hide');
                     toastr.success('Applied config successfully');
                 },
-                error: function(jqXHR, exception) {
+                error: function (jqXHR, exception) {
                     const responseJson = jQuery.parseJSON(jqXHR.responseText);
                     toastr.error(responseJson['message']);
                 }

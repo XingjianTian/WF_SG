@@ -3,19 +3,20 @@
     <div class="col-md-12">
         <div class="card">
             <div class = "card-header">
-            <h5 class="card-title"><em>click the table head to sort</em></h5>
-        </div>
+                <h5 class="card-title"><em>click the table head to sort</em></h5>
+            </div>
             <div class="card-body">
                 <style>
                     #deviceSort th{cursor: pointer;}
                 </style>
                 <table class="table table-bordered" id="deviceSort">
                     <thead><tr>
-                        <th data-type="string">Company Name</th>
-                        <th data-type="string">Owner</th>
-                        <th data-type="num">Built Year</th>
-                        <th data-type="invest">Investment</th>
-                        <th data-type="size">Size</th>
+                        <th data-type="string">Id</th>
+                        <th data-type="string">Device Name</th>
+                        <th data-type="string">Producer</th>
+                        <th data-type="string">Belong IEM</th>
+                        <th data-type="string">User</th>
+                        <th data-type="int">Woring Days</th>
                         <th>Operations</th>
                     </tr>
                     </thead>
@@ -23,16 +24,19 @@
                     <tbody>
                     {{range $i, $v := .list}}
                         <tr>
-                            <td>{{$v.CompanyName}}</td>
-                            <td>{{$v.CompanyOwnerAccount}}</td>
-                            <td>{{$v.CompanyBuildYear}}</td>
-                            <td>{{$v.CompanyInvest}}</td>
-                            <td>{{$v.CompanySize}}</td>
+                            <td>{{$v.DeviceId}}</td>
+                            <td>{{$v.DeviceName}}</td>
+                            <td>{{$v.DeviceProducer}}</td>
+                            <td>{{$v.DeviceBelongIem}}</td>
+                            <td>{{$v.DeviceUserAccount}}</td>
+                            <td>{{$v.DeviceWorkingDays}}</td>
                             <td>
-                                <a href="/company/query/company/{{$v.CompanyName}}"><span class="badge badge-success">Details</span></a>
-                                <a href="/company/update/company/{{$v.CompanyName}}"><span class="badge badge-primary">Update</span></a>
+                                <a href="/ied/query/ied/{{$v.DeviceId}}"><span class="badge
+                                badge-success">Details</span></a>
+                                <a href="/ied/update/ied/{{$v.DeviceId}}"><span class="badge
+                                badge-primary">Update</span></a>
                                 <a href="#"><span class="badge badge-danger" data-toggle="modal"
-                                                  data-target="#modal_remove_company" data-clientid={{$v.CompanyName}}>
+                                                  data-target="#modal_remove_device" data-clientid={{$v.DeviceId}}>
                                     Remove
                                 </span></a>
                             </td>
@@ -101,11 +105,11 @@
 </div>
 
 <!-- /.remove modal -->
-<div class="modal fade" id="modal_remove_company">
+<div class="modal fade" id="modal_remove_device">
     <div class="modal-dialog">
         <div class="modal-content bg-danger">
             <div class="modal-header">
-                <h4 class="modal-title">Delete Company</h4>
+                <h4 class="modal-title">Delete Device</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -114,7 +118,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-outline-dark" id="remove_company_confirm" href="">Apply</button>
+                <button type="button" class="btn btn-outline-dark" id="remove_device_confirm" href="">Apply</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -122,26 +126,26 @@
     <!-- /.modal-dialog -->
 </div>
 <script>
-    // modal_remove_client modal event
-    $("#modal_remove_company").on('show.bs.modal', function (event) {
+    // modal_remove_device modal event
+    $("#modal_remove_device").on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
         const client_id = button.data('clientid');
         const modal = $(this);
-        modal.find('.modal-body').text("You are about to remove company " + client_id);
-        modal.find('#remove_company_confirm').val(client_id);
+        modal.find('.modal-body').text("You are about to remove device " + client_id);
+        modal.find('#remove_device_confirm').val(client_id);
     })
 
     // remove_client_confirm button event
     $(document).ready(function () {
-        $("#remove_company_confirm").click(function () {
+        $("#remove_device_confirm").click(function () {
             const client_id = $(this).val();
             $.ajax({
-                url: '/company/del/company/' + client_id,
+                url: '/ied/del/ied/' + client_id,
                 async: false,
                 method: 'get',
                 success: function (data) {
-                    $("#modal_remove_client").modal('hide');
-                    toastr.success('Removed company successfully');
+                    $("#modal_remove_device").modal('hide');
+                    toastr.success('Removed device successfully');
 
                 },
                 error: function (jqXHR, exception) {

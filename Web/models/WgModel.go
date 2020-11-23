@@ -142,7 +142,7 @@ func (this *WgModel) WgAdd(wgJson []byte) error {
 
 	//qrcode
 
-	png, _ := qrcode.Encode(string(wgJson), qrcode.Low, 200)
+	png, _ := qrcode.Encode(string(wgJson), qrcode.Low, 256)
 
 	wg.Qrcode = "data:image/png;base64," + base64.StdEncoding.EncodeToString(png)
 	sz := len(wg.Qrcode)
@@ -188,11 +188,13 @@ func (this *WgModel) WgUpdateStatus(acc string, status bool) error {
 }
 
 func (this *WgModel) WgDel(acc string) error {
-	var wg WgModel
 	db := common.DB
-	if err := db.Where("account = ?", acc).Delete(&wg).Error; err != nil {
-		return errors.New("failed to delete wireguard instance")
-	}
+
+	db.Where("wg_account = ?", acc).Delete(&AllocatedIpModel{})
+	db.Where("wg_account = ?", acc).Delete(&AllowedIpModel{})
+	db.Where("wg_account = ?", acc).Delete(&ListenIpModel{})
+	db.Where("account = ?", acc).Delete(&WgModel{})
+
 	return nil
 }
 

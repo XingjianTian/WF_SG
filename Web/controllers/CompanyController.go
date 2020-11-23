@@ -64,16 +64,6 @@ func (c *CompanyController) PostUpdateCompany() {
 		common.DefaultErrorShow(err.Error(), c.Ctx)
 	}
 }
-func (c *CompanyController) GetUpdateCompany() mvc.View {
-
-	return mvc.View{
-		Name: "company/updateCompany.html",
-		Data: iris.Map{
-			"Title": "Update Company Info",
-		},
-	}
-}
-
 func (c *CompanyController) GetAddCompany() mvc.View {
 	return mvc.View{
 		Name: "company/addCompany.html",

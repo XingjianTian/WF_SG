@@ -4,38 +4,38 @@ function renderClientList(data) {
 
         let clientStatusHtml = "";
         if (obj.enabled) {
-            clientStatusHtml = `<br><a href = "#"><span class="badge badge-success" onclick="pauseClient('${obj.account}')">Working</span></a>`;
+            clientStatusHtml = `<a href = "#"><span class="badge badge-success" onclick="pauseClient('${obj.account}')">Working</span></a>&nbsp;`;
         }else{
-            clientStatusHtml = `<br><a href = "#"><span  class="badge badge-danger" onclick="resumeClient('${obj.account}')">Disabled</span></a>`;
+            clientStatusHtml = `<a href = "#"><span  class="badge badge-danger" onclick="resumeClient('${obj.account}')">Disabled</span></a>&nbsp;`;
         }
 
 
         // render client allocated ip addresses
         let allocatedIpsHtml = "";
         $.each(obj.allocated_ips, function (index, ip) {
-            allocatedIpsHtml += `<small class="badge badge-success">${ip.ip_address}</small>&nbsp;`;
+            allocatedIpsHtml += `<a href = "#"><span class="badge badge-success">${ip.ip_address}</span></a>&nbsp;`;
         });
 
         // render client allowed ip addresses
         let allowedIpsHtml = "";
         $.each(obj.allowed_ips, function (index, ip) {
-            allowedIpsHtml += `<small class="badge badge-success">${ip.ip_address}</small>&nbsp;`;
+            allowedIpsHtml += `<a href = "#"><span class="badge badge-success">${ip.ip_address}</span></a>&nbsp;`;
         });
 
         let html = `<div class="col-sm-4" id="client_${obj.account}">
-                        <div class="small-box bg-gradient">
-                        <div class="icon" disabled="true" readonly="true">
+                        <div class="info-box bg-gradient-white">
+                        <div class="image">
                             <i><img src="${obj.qrcode}"/></i>
                         </div>
-                            <div class="inner">
-                                    <h4 class ="fa fa-user-circle-o"><b>${obj.account}</b></h4>&nbsp;`
-                               +clientStatusHtml+
-            `<hr><p class="info-box-text"><b>IP Allocation</b></p>`
+                            <div class="info-box-content">
+                                    <span class ="fa fa-user-circle-o"><b>${obj.account}</b></span>`
+            +clientStatusHtml+
+            `<span class="info-box-text"><b>IP Allocation</b></span>`
             + allocatedIpsHtml
-            + `<hr>`
-            + `<p class="info-box-text"><b>Allowed IPs</b></p>`
+
+            + `<span class="info-box-text"><b>Allowed IPs</b></span>`
             + allowedIpsHtml
-            + `<hr>`
+
             + `<div class="small-box-footer">
             <div class="btn-group">
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
