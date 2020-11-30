@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	ds "WF_SG/DataStructure"
+	ds "WF_SG/Chaincode/DataStructure"
 	"WF_SG/Web/common"
 	"WF_SG/Web/models"
 	"github.com/kataras/iris"
@@ -59,6 +59,7 @@ func (c *LoginController) Post() {
 		c.Session.Set("user_type", userInfo.Type)
 		c.Session.Set("userOrgName", userOrgName)
 		c.Ctx.Redirect("/system/main")
+
 		//c.Session.Set("channel",chl)
 
 	} else {

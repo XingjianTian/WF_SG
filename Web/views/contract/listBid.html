@@ -11,14 +11,12 @@
                 </style>
                 <table class="table table-bordered" id="contractSort">
                     <thead><tr>
+                        <th data-type="string">Bid ID</th>
                         <th data-type="string">Contract Name</th>
-                        <th data-type="num">Version</th>
                         <th data-type="string">Company</th>
-                        <th data-type="string">User</th>
                         <th data-type="string">Energy Type</th>
                         <th data-type="num">Energy Price</th>
                         <th data-type="num">Lasting</th>
-                        <th data-type="date">SignAt</th>
                         <th>Operations</th>
                     </tr>
                     </thead>
@@ -26,18 +24,22 @@
                     <tbody>
                     {{range $i, $v := .list}}
                         <tr>
-                            <td>{{$v.ContratName}}</td>
-                            <td>{{$v.ContractVersion}}</td>
+                            <td>{{$v.ContractId}}</td>
+                            <td>{{$v.ContractName}}</td>
                             <td>{{$v.ContractCompanyName}}</td>
-                            <td>{{$v.ContractUserAccount}}</td>
                             <td>{{$v.EnergyType}}</td>
                             <td>{{$v.EnergyPrice}}</td>
                             <td>{{$v.ContractLastTime}}</td>
                             <td>
                                 <a href="#"><span class="badge badge-info" data-toggle="modal"
-                                                  data-target="#modal_query_contract" data-clientid={{$v.ContractId}}
-                                                  data-user={{$v.ContractUserAccount}} data-version={{$v.ContractVersion}}>
+                                                  data-target="#modal_query_contract" data-clientid={{$v.ContractId}}>
                                     Details
+                                </span></a>
+                                <a href="/contract/update/bid/{{$v.ContractId}}"><span
+                                            class="badge badge-primary">Update</span></a>
+                                <a href="#"><span class="badge badge-danger" data-toggle="modal"
+                                                  data-target="#modal_remove_contract" data-clientid={{$v.ContractId}}>
+                                    Delete
                                 </span></a>
                             </td>
                         </tr>
@@ -117,12 +119,12 @@
                 <div class="modal-body">
                     <input type="hidden" id="_client_id" name="_client_id">
                     <div class="form-group">
-                        <label class="control-label">Contract Id</label>
+                        <label class="control-label">Bid Id</label>
                         <input type="text" class="form-control" id="_contract_id"  disabled="disabled">
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">Contract Name</label>
+                        <label class="control-label">Bid Name</label>
                         <input type="text" class="form-control" id="_contract_name" disabled="disabled">
                     </div>
 
@@ -136,13 +138,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">User</label>
-                        <input type="text" class="form-control" id="_contract_user" disabled="disabled">
-                    </div>
-
-                    <div class="form-group">
                         <label  class="control-label">Details</label>
-                        <input type="text" class="form-control" id="_contract_details"  disabled="disabled">
+                        <textarea class="form-control" id="_contract_details" rows ="4"disabled="disabled"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -160,14 +157,10 @@
                         <input type="text" class="form-control" id="_contract_last"  disabled="disabled">
                     </div>
 
-                    <div class="form-group">
-                        <label  class="control-label">SignAt</label>
-                        <input type="text" class="form-control" id="_contract_sign_time"  disabled="disabled">
-                    </div>
-
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="sign_confirm">Sign</button>
                 </div>
             </form>
         </div>
@@ -183,28 +176,104 @@
             let modal = $(this);
             const button = $(event.relatedTarget);
             const client_id = button.data('clientid');
-            const user = button.data('user');
-            const version = button.data('version');
-            const contractKey = client_id+"-"+user+"-"+version;
+
             // update client modal data
             $.ajax({
                 cache: false,
                 method: 'GET',
-                url: '/contract/query/info/' + contractKey,
+                url: '/contract/query/bid/' + client_id,
                 dataType: 'json',
                 contentType: "application/json",
                 success: function (resp) {
 
-                    modal.find(".modal-title").text("Client Details");
+                    modal.find(".modal-title").text("Bid Details");
                     modal.find("#_contract_id").val(resp.contract_id);
                     modal.find("#_contract_name").val(resp.contract_name);
                     modal.find("#_contract_version").val(resp.contract_version);
                     modal.find("#_contract_company").val(resp.contract_company_name);
-                    modal.find("#_contract_user").val(resp.contract_user_account);
+                    modal.find("#_contract_details").val(resp.contract_details);
                     modal.find("#_energy_type").val(resp.energy_type);
                     modal.find("#_energy_price").val(resp.energy_price);
                     modal.find("#_contract_last").val(resp.contract_last_time);
-                    modal.find("#_contract_sign_time").val(resp.contract_sign_time);
+                    modal.find('#sign_confirm').val(client_id)
+
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+    // sign_confirm button event
+    $(document).ready(function () {
+        $("#sign_confirm").click(function () {
+
+            const client_id = $(this).val();
+            $.ajax({
+                url: '/contract/add/contract',
+                async: false,
+                type: 'post',
+                data: {"bidId":client_id},
+                success: function (data) {
+                    $("#modal_query_contract").modal('hide');
+                    toastr.success('Sign Contract successfully');
+                    const divElement = document.getElementById('client_' + client_id);
+                    divElement.style.display = "none";
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+        });
+    });
+</script>
+
+
+<div class="modal fade" id="modal_remove_contract">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Remove</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-dark" id="remove_contract_confirm">Confirm</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<script>
+    // modal_remove_client modal event
+    $("#modal_remove_contract").on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const client_id = button.data('clientid');
+        const modal = $(this);
+        modal.find('.modal-body').text("You are about to delete bid " + client_id);
+        modal.find('#remove_contract_confirm').val(client_id);
+    })
+
+    // remove_client_confirm button event
+    $(document).ready(function () {
+        $("#remove_contract_confirm").click(function () {
+            const client_id = $(this).val();
+            $.ajax({
+                url: '/contract/del/bid/' + client_id,
+                async: false,
+                method: 'get',
+                success: function (data) {
+                    $("#modal_remove_contract").modal('hide');
+                    toastr.success('Removed bid successfully');
 
                 },
                 error: function (jqXHR, exception) {

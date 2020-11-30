@@ -1,0 +1,90 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" role="form" method="post" action="/contract/update/bid"
+                  enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Bid Id </label>
+                        <div class="col-sm-4">
+                            {{.bidInfo.ContractId}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Bid Name </label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows="1" id="bidName" name="bidName"
+                                      placeholder="Change Bid Name">{{.bidInfo.ContractName}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Version</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows="1" id="bidVersion" name="bidVersion"
+                                      placeholder="Update Bid Version">{{.bidInfo.ContractVersion}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Company</label>
+                        <div class="col-sm-4">
+                            {{.bidInfo.ContractCompanyName}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Details</label>
+                        <div class="col-sm-4">
+                            <textarea name="contractDetails" class="form-control" rows="3"
+                                      placeholder="Please decribe your contract...">{{.bidInfo.ContractDetails}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Energy Type</label>
+                        <div class="col-sm-4">
+                            <textarea name="energyType" class="form-control" rows="1" placeholder="Enter energy type">{{.bidInfo.EnergyType}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Energy Price</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control" placeholder="Enter energy price" rows="1" name="energyPrice">{{.bidInfo.EnergyPrice}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Lasting</label>
+
+                        <div class="col-sm-4">
+                            <textarea class="form-control" rows="1" placeholder="How long will this contract last?" name="companyLast">{{.bidInfo.ContractLastTime}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputContractFile" class="col-sm-2 control-label">Bid File</label>
+
+                        <div class="col-sm-4">
+                            <input name="contractFile" type="file" class="form-control" placeholder="Choose file(pdf/word)">
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Update Your Bid</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

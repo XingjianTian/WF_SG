@@ -1,8 +1,8 @@
 package Services
 
 import (
-	ds "WF_SG/DataStructure"
-	sig "WF_SG/Utils"
+	ds "WF_SG/Chaincode/DataStructure"
+	sig "WF_SG/Chaincode/Utils"
 	//"WF_SG/Web/models"
 	"encoding/json"
 	"fmt"
@@ -160,26 +160,31 @@ func (t *ServiceSetup) QueryAllTables(userOrgName string) (string, error) {
 //contract
 func (t *ServiceSetup) AddContractService(contractJson []byte) (string, error) {
 	eventID := "eventAddContract"
+	if len(t.Clients) == 0 {
+		return "fabric network down", nil
+	}
 	cli := t.Clients["WH-zhijianju"]
 	//cli := t.Clients[userOrgName]
 	reg, notifer := eventRegister(cli, t.ChaincodeID, eventID)
 	defer cli.UnregisterChaincodeEvent(reg)
 
-	var contract ds.ContractInfo
+	var contract ds.ContractModel
 	err := json.Unmarshal(contractJson, &contract)
 	if err != nil {
 		return "", err
 	}
 	//use private key to sign
-	signature, _ := sig.Sign(contractJson, contract.ContractCompanyName)
-	contract.ContractCompanySig = signature
+	signature, _ := sig.Sign(contractJson, contract.ContractUserAccount)
+	contract.ContractUserSig = signature
 	contractJson, err = json.Marshal(contract)
 
 	if err != nil {
 		return "", err
 	}
+
+	//contract key!!!!
 	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "addContract", Args: [][]byte{contractJson,
-		[]byte("contract-" + contract.ContractId + "-" + contract.ContractVersion)}}
+		[]byte(contract.ContractKey())}}
 
 	response, err := cli.Execute(req)
 	if err != nil {
@@ -191,7 +196,6 @@ func (t *ServiceSetup) AddContractService(contractJson []byte) (string, error) {
 	}
 	return string(response.TransactionID), nil
 }
-
 func (t *ServiceSetup) QueryAllContractsService() (string, error) {
 	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "queryAllContracts"}
 
@@ -204,9 +208,9 @@ func (t *ServiceSetup) QueryAllContractsService() (string, error) {
 	return string(response.Payload), nil
 
 }
+func (t *ServiceSetup) QueryContractByKeyService(contractKey string) (string, fab.TransactionID, error) {
 
-func (t *ServiceSetup) QueryContractByIdService(contractId string) (string, fab.TransactionID, error) {
-	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "queryContractById", Args: [][]byte{[]byte(contractId)}}
+	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "queryContractByKey", Args: [][]byte{[]byte(contractKey)}}
 
 	//cli:=t.Clients[userOrgName]
 	cli := t.Clients["WH-zhijianju"]
@@ -215,13 +219,84 @@ func (t *ServiceSetup) QueryContractByIdService(contractId string) (string, fab.
 		return "", "", err
 	}
 
-	txID, err := t.SearchTxIDByContractId(contractId)
+	txID, err := t.SearchTxIDByContractKey(contractKey)
 
 	return string(response.Payload), txID, nil
 
 }
-func (t *ServiceSetup) SearchTxIDByContractId(contractId string) (fab.TransactionID, error) {
-	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "searchTxIDByContractId", Args: [][]byte{[]byte(contractId)}}
+func (t *ServiceSetup) SearchTxIDByContractKey(contractKey string) (fab.TransactionID, error) {
+	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "searchTxIDByContractKey", Args: [][]byte{[]byte(contractKey)}}
+
+	//cli:=t.Clients[userOrgName]
+	cli := t.Clients["WH-zhijianju"]
+	response, err := cli.Query(req)
+	if err != nil {
+		return "", err
+	}
+	return fab.TransactionID(response.Payload), nil
+
+}
+
+//Ieds
+func (t *ServiceSetup) AddIedService(iedJson []byte) (string, error) {
+	eventID := "eventAddContract"
+
+	if len(t.Clients) == 0 {
+		return "fabric network down", nil
+	}
+
+	cli := t.Clients["WH-zhijianju"]
+	//cli := t.Clients[userOrgName]
+	reg, notifer := eventRegister(cli, t.ChaincodeID, eventID)
+	defer cli.UnregisterChaincodeEvent(reg)
+
+	var ied ds.IedModel
+	err := json.Unmarshal(iedJson, &ied)
+	if err != nil {
+		return "", err
+	}
+	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "addIed", Args: [][]byte{iedJson,
+		[]byte(ied.DeviceId)}}
+
+	response, err := cli.Execute(req)
+	if err != nil {
+		return "", err
+	}
+	err = eventResult(notifer, eventID)
+	if err != nil {
+		return "", err
+	}
+	return string(response.TransactionID), nil
+}
+func (t *ServiceSetup) QueryAllIedsService() (string, error) {
+	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "queryAllIeds"}
+
+	//cli:=t.Clients[userOrgName]
+	cli := t.Clients["WH-zhijianju"]
+	response, err := cli.Query(req)
+	if err != nil {
+		return "", err
+	}
+	return string(response.Payload), nil
+
+}
+func (t *ServiceSetup) QueryIedByIdService(id string) (string, fab.TransactionID, error) {
+	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "queryIedById", Args: [][]byte{[]byte(id)}}
+
+	//cli:=t.Clients[userOrgName]
+	cli := t.Clients["WH-zhijianju"]
+	response, err := cli.Query(req)
+	if err != nil {
+		return "", "", err
+	}
+
+	txID, err := t.SearchTxIDByIedId(id)
+
+	return string(response.Payload), txID, nil
+
+}
+func (t *ServiceSetup) SearchTxIDByIedId(id string) (fab.TransactionID, error) {
+	req := channel.Request{ChaincodeID: t.ChaincodeID, Fcn: "searchTxIDByIedId", Args: [][]byte{[]byte(id)}}
 
 	//cli:=t.Clients[userOrgName]
 	cli := t.Clients["WH-zhijianju"]

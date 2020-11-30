@@ -115,8 +115,8 @@ func (c *CompanyController) GetQueryCompany() mvc.View {
 			"PageHtml": common.GetPageHtml(totalPages, page, total, c.Ctx.Path()),
 		},
 	}
-
 }
+
 func (c *CompanyController) GetQueryCompanyBy(companyName string) mvc.View {
 
 	companyInfo, err := companyModel.CompanyInfo(companyName)

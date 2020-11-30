@@ -135,25 +135,73 @@ VALUES ('2018-10-22 14:03:48', '2018-11-01 15:01:13', null, 'Believing Energy', 
 -- Records of company
 
 
--- ----------------------------
--- Table structure for `addTable`
--- ----------------------------
+-- -----------------------------
+-- Bids-------------------------
 
-DROP TABLE IF EXISTS `table_for_web`;
-CREATE TABLE `table_for_web`
+
+DROP TABLE IF EXISTS `bid`;
+CREATE TABLE `bid`
 (
-    `id`         int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `tid`        varchar(100)     NOT NULL DEFAULT '' COMMENT '表单ID',
-    `tname`      varchar(100)     NOT NULL DEFAULT '' COMMENT '表单名称',
-    `created_at` timestamp        NULL     DEFAULT NULL,
-    `updated_at` timestamp        NULL     DEFAULT NULL,
-    `deleted_at` timestamp        NULL     DEFAULT NULL,
+    `id`                    int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `created_at`            timestamp        NULL DEFAULT NULL,
+    `updated_at`            timestamp        NULL DEFAULT NULL,
+    `deleted_at`            timestamp        NULL DEFAULT NULL,
+    `contract_id`           varchar(50)      NOT NULL,
+    `contract_name`         varchar(50)      NOT NULL,
+    `contract_version`      varchar(50)      NOT NULL,
+    `contract_company_name` varchar(50)      NOT NULL,
+    `contract_company_owner_account` varchar(50)      NOT NULL,
+    `contract_company_owner_sig`  varchar(255)          DEFAULT '',
+    `contract_details`      varchar(255)          DEFAULT '',
+    `energy_type`           varchar(50)      NOT NULL,
+    `energy_price`          varchar(50)      NOT NULL,
+    `contract_last_time`    varchar(50)      NOT NULL,
     PRIMARY KEY (`id`),
-    KEY `tid` (`tid`)
-) ENGINE = MyISAM
-  AUTO_INCREMENT = 4
-  DEFAULT CHARSET = utf8mb4;
+    KEY `idx_user_deleted_at` (`deleted_at`),
+    KEY `contract_id` (`contract_id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8;
 
--- ----------------------------
--- Records of table_for_web
--- ----------------------------
+
+INSERT INTO `bid`(contract_id, contract_name, contract_version,
+                  contract_company_name,contract_company_owner_account, contract_details, energy_type, energy_price,
+                  contract_last_time)
+VALUES ('0001', 'Water Power Project', '1.0', 'SanFrancisco Power','Admin@HUST.builder.com',
+        'The water power project started 3 years ago, aiming to provide clean water power for electricity supply.',
+        'water',
+        '1.5',
+        '12');
+
+INSERT INTO `bid`(contract_id, contract_name, contract_version,
+                  contract_company_name,contract_company_owner_account, contract_details, energy_type, energy_price, contract_last_time)
+VALUES ('0002', 'Nuclear Supply Project', '1.0', 'SanFrancisco Power','Admin@HUST.builder.com',
+        'Nuclear Power is good, nuclear power is strong, nuclear power is necessary',
+        'nuclear',
+        '1.2',
+        '24');
+
+INSERT INTO `bid`(contract_id, contract_name, contract_version,
+                  contract_company_name,contract_company_owner_account, contract_details, energy_type, energy_price, contract_last_time)
+VALUES ('0003', 'Windy Supply', '1.0', 'Believing Energy','Admin@WH-zhijianju.supervisor.com',
+        'Spanish wind turbine manufacturer Siemens Gamesa Renewable Energy (SGRE) has secured a contract from Berkshire Hathaway Energy (BHE) Canada for its 130MW Rattlesnake Ridge wind power project',
+        'wind',
+        '1.6',
+        '12');
+
+INSERT INTO `bid`(contract_id, contract_name, contract_version,
+                  contract_company_name,contract_company_owner_account, contract_details, energy_type, energy_price, contract_last_time)
+VALUES ('0004', 'Tidal Wave Weighs', '1.0', 'Santa Claus Power','Admin@WH-zhijianju.supervisor.com',
+        'A operating on the same principle as wind turbines, the power in sea turbines comes from tidal currents
+which turn blades similar to ships propellers, but, unlike wind, the tides are predictable and the power input is constant',
+        'tidal',
+        '1.6',
+        '6');
+
+INSERT INTO `bid`(contract_id, contract_name, contract_version,
+                  contract_company_name,contract_company_owner_account, contract_details, energy_type, energy_price, contract_last_time)
+VALUES ('0005', 'Sunny Everyday', '1.0', 'Trustworth Energy Company','Admin@HUST.builder.com',
+        'Solar power is becoming increasingly popular as both individuals and businesses realize the potential of energy independence through power provided by the sun',
+        'solar',
+        '1.5',
+        '6');

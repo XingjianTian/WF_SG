@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"C"
-	ds "WF_SG/DataStructure"
+	ds "WF_SG/Chaincode/DataStructure"
 	"WF_SG/Web/common"
 	"WF_SG/Web/models"
 	"encoding/base64"

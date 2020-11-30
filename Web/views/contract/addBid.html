@@ -1,0 +1,87 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" role="form" method="post" action="/contract/add/bid"
+                  enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class = "col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Bid Id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Enter contract id" value="" name="contractId">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Bid Name</label>
+                        <div class="col-sm-10">
+                            <input  name="contractName" type="text" class="form-control"  placeholder="Enter your contract name" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">Version</label>
+                        <div class="col-sm-10">
+                            <input type = "text" name="contractVersion" class="form-control"  placeholder="Enter contract Version">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">Company</label>
+                        <div class="col-sm-10">
+                            <input type = "text" name="contractCompany" class="form-control"  placeholder="Enter company name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Details</label>
+                        <div class="col-sm-10">
+                            <textarea name="contractDetails" class="form-control" rows="3" placeholder="Please decribe your contract..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">Energy Type</label>
+                        <div class="col-sm-10">
+                            <input type = "text" name="energyType" class="form-control"  placeholder="Enter energy type">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Energy Price</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Enter energy price" name="energyPrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Lasting</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control"  placeholder="How long will this contract last?" name="companyLast">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputContractFile" class="col-sm-2 control-label">Bid File</label>
+
+                        <div class="col-sm-10">
+                            <input name="contractFile" type="file" class="form-control"  placeholder="Choose file(pdf/word)">
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Upload Your Bid</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+
+
+    </div>
+</div>

@@ -15,22 +15,30 @@ type ContractModel struct {
 	ContractId      string `gorm:"primary_key;type:varchar(50);not null;" json:"contract_id"`
 	ContractVersion string `gorm:"type:varchar(50);not null;" json:"contract_version"`
 	//fabric key:id+"-"+version
-	ContractName        string `gorm:"type:varchar(50);not null;" json:"contract_name"`
-	ContractCompanyName string `gorm:"type:varchar(50);not null;" json:"contract_company_name"`
-	ContractCompanySig  string `gorm:"type:varchar(50);not null;" json:"contract_company_sig"`
-	ContractDetails     string `gorm:"type:varchar(50);not null;" json:"contract_details"`
-	EnergyType          string `gorm:"type:varchar(50);not null;" json:"energy_type"`
-	EnergyPrice         string `gorm:"type:varchar(50);not null;" json:"energy_price"`
-	ContractLastTime    string `gorm:"type:varchar(50);not null;" json:"contract_last_time"`
+	ContractName                string `gorm:"type:varchar(50);not null;" json:"contract_name"`
+	ContractCompanyName         string `gorm:"type:varchar(50);not null;" json:"contract_company_name"`
+	ContractCompanyOwnerAccount string `gorm:"type:varchar(50);not null;" json:"contract_company_owner_account"`
+	ContractCompanyOwnerSig     string `gorm:"type:varchar(255);not null;" json:"contract_company_owner_sig"`
+	ContractDetails             string `gorm:"type:varchar(50);not null;" json:"contract_details"`
+	EnergyType                  string `gorm:"type:varchar(50);not null;" json:"energy_type"`
+	EnergyPrice                 string `gorm:"type:varchar(50);not null;" json:"energy_price"`
+	ContractLastTime            string `gorm:"type:varchar(50);not null;" json:"contract_last_time"`
+
+	ContractSignTime    string `gorm:"type:varchar(50);not null;" json:"contract_last_time"`
+	ContractUserAccount string `gorm:"type:varchar(50);not null;" json:"contract_user_account"`
+	ContractUserSig     string `gorm:"type:varchar(50);not null;" json:"contract_user_sig"`
 }
 
 func (this *ContractModel) TableName() string {
 	return "contract"
 }
+func (this *ContractModel) ContractKey() string {
+	return this.ContractId + "-" + this.ContractVersion + "-" + this.ContractUserAccount
+}
 
 func (this *ContractModel) ContractInfo(contractId string) (ContractModel, fab.TransactionID, error) {
 
-	res, txID, err := Services.HLservice.QueryContractByIdService(contractId)
+	res, txID, err := Services.HLservice.QueryContractByKeyService(contractId)
 	if err != nil {
 		return ContractModel{}, "", err
 	}
@@ -54,20 +62,15 @@ func (this *ContractModel) ContractList(page int) ([]ContractModel, int, int, er
 
 	return data, totalCount, totalPages, err
 }
-func (this *ContractModel) ContractAdd(postValues map[string][]string, filePath string, acc string) error {
+func (this *ContractModel) ContractAdd(userAcc string, filePath string, bidId string) error {
 
-	var contract ContractModel
+	var bid BidModel
+	bid, err := bid.BidInfo(bidId)
+	if err != nil {
+		return err
+	}
 
-	contract.ContractId = postValues["contractId"][0]
-	contract.ContractName = postValues["contractName"][0]
-	contract.ContractVersion = postValues["contractVersion"][0]
-	contract.ContractCompanyName = postValues["contractCompany"][0]
-	contract.ContractDetails = postValues["contractDetails"][0]
-	contract.EnergyType = postValues["energyType"][0]
-	contract.EnergyPrice = postValues["energyPrice"][0]
-	contract.ContractLastTime = postValues["contractLast"][0]
-
-	contractJson, err := json.Marshal(&contract)
+	contractJson, err := json.Marshal(&bid)
 	if err != nil {
 		return err
 	}

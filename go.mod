@@ -51,3 +51,5 @@ require (
 	golang.zx2c4.com/wireguard/wgctrl v0.0.0-20200609130330-bd2cb7843e1b
 	qiniupkg.com/x v7.0.8+incompatible // indirect
 )
+
+replace golang.org/x/sys => golang.org/x/sys v0.0.0-20190830141801-acfa387b8d69

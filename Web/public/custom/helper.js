@@ -22,7 +22,7 @@ function renderClientList(data) {
             allowedIpsHtml += `<a href = "#"><span class="badge badge-success">${ip.ip_address}</span></a>&nbsp;`;
         });
 
-        let html = `<div class="col-sm-4" id="client_${obj.account}">
+        let html = `<div class="col-sm-6" id="client_${obj.account}">
                         <div class="info-box bg-gradient-white">
                         <div class="image">
                             <i><img src="${obj.qrcode}"/></i>

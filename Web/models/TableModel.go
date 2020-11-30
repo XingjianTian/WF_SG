@@ -1,7 +1,7 @@
 package models
 
 import (
-	ds "WF_SG/DataStructure"
+	ds "WF_SG/Chaincode/DataStructure"
 	"WF_SG/Services"
 	"encoding/json"
 	"fmt"

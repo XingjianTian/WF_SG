@@ -13,6 +13,7 @@ var userModel models.UserModel
 var companyModel models.CompanyModel
 var wgModel models.WgModel
 var contractModel models.ContractModel
+var bidModel models.BidModel
 var iedModel models.IedModel
 
 type SystemController struct {

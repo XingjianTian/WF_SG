@@ -1,15 +1,15 @@
 package main
 
 import (
-	ds "WF_SG/DataStructure"
-	sig "WF_SG/Utils"
+	ds "WF_SG/Chaincode/DataStructure"
+	sig "WF_SG/Chaincode/Utils"
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"testing"
 )
 
-var userid string = "Admin@HUST.builder.com"
+var userAccount = "Admin@HUST.builder.com"
 
 func mockInit(t *testing.T, stub *shim.MockStub, args [][]byte) {
 	res := stub.MockInit("1", args)
@@ -19,49 +19,129 @@ func mockInit(t *testing.T, stub *shim.MockStub, args [][]byte) {
 	}
 }
 
-func addTable(t *testing.T, stub *shim.MockStub, args []string) {
-	res := stub.MockInvoke("1", [][]byte{[]byte("addTable"), []byte(args[0]), []byte(userid)})
+func addIed(t *testing.T, stub *shim.MockStub, args []string) {
+	res := stub.MockInvoke("1", [][]byte{[]byte("addIed"), []byte(args[0]), []byte(args[1])})
 
 	if res.Status != shim.OK {
-		fmt.Println("AddTable failed:", args[0], string(res.Message))
+		fmt.Println("AddIed failed:", args[0], string(res.Message))
 		t.FailNow()
 	}
 }
-func searchTableById(t *testing.T, stub *shim.MockStub, tableId string) {
-	res := stub.MockInvoke("1", [][]byte{[]byte("searchTableById"), []byte(tableId)})
+func queryIedById(t *testing.T, stub *shim.MockStub, id string) {
+	res := stub.MockInvoke("1", [][]byte{[]byte("queryIedById"), []byte(id)})
 	if res.Status != shim.OK {
-		fmt.Println("SearchTableById :", tableId, ", failed :", string(res.Message))
+		fmt.Println("queryIedById :", id, ", failed :", string(res.Message))
 		t.FailNow()
 	}
 	if res.Payload == nil {
-		fmt.Println("SearchTableById :", tableId, " failed to get value")
+		fmt.Println("queryIedById :", id, " failed to get value")
 		t.FailNow()
 	}
 }
-func queryAllTables(t *testing.T, stub *shim.MockStub) {
-	res := stub.MockInvoke("1", [][]byte{[]byte("queryAllTables")})
+func queryAllIeds(t *testing.T, stub *shim.MockStub) {
+	res := stub.MockInvoke("1", [][]byte{[]byte("queryAllIeds")})
 	if res.Status != shim.OK {
-		fmt.Println("query all tables: failed", string(res.Message))
+		fmt.Println("query all Ieds: failed", string(res.Message))
 		t.FailNow()
 	}
 	if res.Payload == nil {
-		fmt.Println("query all tables failed to get value")
-		t.FailNow()
-	}
-}
-func queryAllTablesWithoutExclude(t *testing.T, stub *shim.MockStub) {
-	res := stub.MockInvoke("1", [][]byte{[]byte("queryAllTablesWithoutExclude")})
-	if res.Status != shim.OK {
-		fmt.Println("query all tables without exclude: failed", string(res.Message))
-		t.FailNow()
-	}
-	if res.Payload == nil {
-		fmt.Println("query all tables failed to get value")
+		fmt.Println("query all Ieds failed to get value")
 		t.FailNow()
 	}
 }
 
-// test addTable and search
+func addContract(t *testing.T, stub *shim.MockStub, args []string) {
+	res := stub.MockInvoke("1", [][]byte{[]byte("addContract"), []byte(args[0]), []byte(args[1])})
+
+	if res.Status != shim.OK {
+		fmt.Println("AddIed failed:", args[0], string(res.Message))
+		t.FailNow()
+	}
+}
+func queryContractById(t *testing.T, stub *shim.MockStub, id string) {
+	res := stub.MockInvoke("1", [][]byte{[]byte("queryContractByKey"), []byte(id)})
+	if res.Status != shim.OK {
+		fmt.Println("queryContractByKey :", id, ", failed :", string(res.Message))
+		t.FailNow()
+	}
+	if res.Payload == nil {
+		fmt.Println("queryContractByKey :", id, " failed to get value")
+		t.FailNow()
+	}
+}
+func queryAllContracts(t *testing.T, stub *shim.MockStub) {
+	res := stub.MockInvoke("1", [][]byte{[]byte("queryAllContracts")})
+	if res.Status != shim.OK {
+		fmt.Println("query all Contracts: failed", string(res.Message))
+		t.FailNow()
+	}
+	if res.Payload == nil {
+		fmt.Println("query all Contracts failed to get value")
+		t.FailNow()
+	}
+}
+
+func Test(t *testing.T) {
+	smartContract := new(SmartContract)
+	stub := shim.NewMockStub("SmartContract", smartContract)
+	mockInit(t, stub, nil)
+
+	var ied1 = ds.IedModel{
+		DeviceId:           "1",
+		DeviceName:         "Intelligent Device Generation-2",
+		DeviceProducer:     "Smart Bridge Company",
+		DeviceWorkingDays:  0,
+		DeviceBelongIem:    "Lakeview Community",
+		DeviceUserAccount:  userAccount,
+		DeviceDownInfos:    nil,
+		DeviceWorkingInfos: nil,
+	}
+	iedAsJsonBytes1, _ := json.Marshal(ied1)
+	addIed(t, stub, []string{string(iedAsJsonBytes1), ied1.DeviceId})
+	queryIedById(t, stub, ied1.DeviceId)
+	//addTable(t, stub, []string{string(tableAsJsonBytes)})
+	queryAllIeds(t, stub)
+
+	///contractt
+
+	var contract1 = ds.ContractModel{
+		ContractId:                  "1231",
+		ContractVersion:             "1.0",
+		ContractName:                "Smart Water",
+		ContractCompanyName:         "SanFrancisco Power",
+		ContractCompanyOwnerAccount: userAccount,
+		ContractCompanyOwnerSig:     "",
+		ContractDetails:             "saeoijufhnoquawehjnfoiq",
+		EnergyType:                  "water",
+		EnergyPrice:                 "1.39",
+		ContractLastTime:            "2020.01.12",
+		ContractSignTime:            "",
+		ContractUserAccount:         userAccount,
+		ContractUserSig:             "",
+	}
+
+	contractAsJsonBytes1, _ := json.Marshal(contract1)
+	var bid ds.BidModel
+	_ = json.Unmarshal(contractAsJsonBytes1, &bid)
+	bidAsJsonBytes, _ := json.Marshal(bid)
+
+	//test use private key to sign
+	signature1, _ := sig.Sign(bidAsJsonBytes, bid.ContractCompanyOwnerAccount)
+	contract1.ContractCompanyOwnerSig = signature1
+	contractAsJsonBytes1, _ = json.Marshal(contract1)
+
+	signature2, _ := sig.Sign(contractAsJsonBytes1, contract1.ContractUserAccount)
+	contract1.ContractUserSig = signature2
+	contractAsJsonBytes1, _ = json.Marshal(contract1)
+
+	addContract(t, stub, []string{string(contractAsJsonBytes1), contract1.ContractId})
+	queryContractById(t, stub, contract1.ContractId)
+	queryAllContracts(t, stub)
+
+	return
+}
+
+/*
 func TestAddTable(t *testing.T) {
 	smartContract := new(SmartContract)
 	stub := shim.NewMockStub("SmartContract", smartContract)
@@ -151,7 +231,6 @@ func TestAddTable(t *testing.T) {
 			t.FailNow()
 		}
 		tableAsJsonBytes2,_ := json.Marshal(table2)
-	*/
 
 	//test use private key to sign
 	signature1, _ := sig.Sign(tableAsJsonBytes1, userid)
@@ -159,11 +238,9 @@ func TestAddTable(t *testing.T) {
 	tableAsJsonBytes1, _ = json.Marshal(table1)
 
 	//test use private key to sign
-	/*
 		signature2,_ :=sig.Sign(tableAsJsonBytes2,userid)
 		table2.Sig=append(table1.Sig, signature2)
 		tableAsJsonBytes2,err = json.Marshal(table2)
-	*/
 
 	addTable(t, stub, []string{string(tableAsJsonBytes1)})
 	searchTableById(t, stub, "1@supervisor.com")
@@ -172,3 +249,4 @@ func TestAddTable(t *testing.T) {
 	queryAllTablesWithoutExclude(t, stub)
 	return
 }
+*/

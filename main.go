@@ -1,10 +1,15 @@
 package main
 
 import (
-	"WF_SG/DataStructure"
+	ds "WF_SG/Chaincode/DataStructure"
+	"WF_SG/Chaincode/Utils"
+	"WF_SG/SDKInit"
+	"WF_SG/Services"
 	"WF_SG/Web/common"
 	"WF_SG/Web/models"
 	"WF_SG/Web/routes"
+	"encoding/json"
+	"fmt"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
@@ -13,6 +18,96 @@ import (
 	"strconv"
 	"time"
 )
+
+func InitDb() {
+	//bids sig
+	var bids []models.BidModel
+	db := common.DB
+	db.Find(&bids)
+	for i := 0; i < len(bids); i++ {
+
+		if bids[i].ContractCompanyOwnerSig != "" {
+			continue
+		}
+
+		bigJsonBeforeSig, _ := json.Marshal(bids[i])
+		bidSig, err := Utils.Sign(bigJsonBeforeSig, bids[i].ContractCompanyOwnerAccount)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		bids[i].ContractCompanyOwnerSig = bidSig
+		db.Save(&bids[i])
+	}
+	println("bids sig initialized")
+
+	//user keys
+	var keypair Utils.KeyPair
+
+	_ = json.Unmarshal([]byte("{\"Skpem\":\"LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR0hBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEJHMHdhd0lCQVFRZ0F1UzduSHBLUTZveC8xdUwKY0NXbU1MYmVkZmNDNUJIVk9WcEVpZ0ZCQ1graFJBTkNBQVI2Q2FqVk1xSGlkSnFPU2dqbUpOM0VoSEgvT0tqWgp3NzMvVmJGS1pZbjhYcW1JclNMQi9qRzdpOWs1QlpMYk1HenFzSVVpUmxBWjdEL0J5VjYvSGRJegotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg==\",\"Pkpem\":\"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNIRENDQWNLZ0F3SUJBZ0lSQUxJcjNBSlVHVi9PSnhOSVozdXNQTDh3Q2dZSUtvWkl6ajBFQXdJd2FURUwKTUFrR0ExVUVCaE1DVlZNeEV6QVJCZ05WQkFnVENrTmhiR2xtYjNKdWFXRXhGakFVQmdOVkJBY1REVk5oYmlCRwpjbUZ1WTJselkyOHhGREFTQmdOVkJBb1RDMkoxYVd4a1pYSXVZMjl0TVJjd0ZRWURWUVFERXc1allTNWlkV2xzClpHVnlMbU52YlRBZUZ3MHlNREF4TVRBd09EUTVNREJhRncwek1EQXhNRGN3T0RRNU1EQmFNR2N4Q3pBSkJnTlYKQkFZVEFsVlRNUk13RVFZRFZRUUlFd3BEWVd4cFptOXlibWxoTVJZd0ZBWURWUVFIRXcxVFlXNGdSbkpoYm1OcApjMk52TVE4d0RRWURWUVFMRXdaamJHbGxiblF4R2pBWUJnTlZCQU1NRVVGa2JXbHVRR0oxYVd4a1pYSXVZMjl0Ck1Ga3dFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRWVnbW8xVEtoNG5TYWprb0k1aVRkeElSeC96aW8KMmNPOS8xV3hTbVdKL0Y2cGlLMGl3ZjR4dTR2Wk9RV1MyekJzNnJDRklrWlFHZXcvd2NsZXZ4M1NNNk5OTUVzdwpEZ1lEVlIwUEFRSC9CQVFEQWdlQU1Bd0dBMVVkRXdFQi93UUNNQUF3S3dZRFZSMGpCQ1F3SW9BZ2dUbmpkVU9nCldMNVcxNDNjRGlCVnNQNndVZldxSVN6NG04MzlERGVxcXZBd0NnWUlLb1pJemowRUF3SURTQUF3UlFJaEFNb2QKR2pnN0c2UFZjNEMvRnQyMWtHajVWRUVPWUNIeXJacVBNN2xTdlVidkFpQVB4QU1pcWUwVjgrTjkrRjduWjI2bAppOTJNU05lUHltRlNiSENxd3IxL05BPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=\"}"), &keypair)
+
+	/*
+		keypair = Utils.KeyPair{
+			Skpem: []byte("LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR0hBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEJHMHdhd0lCQVFRZ0F1UzduSHBLUTZveC8xdUwKY0NXbU1MYmVkZmNDNUJIVk9WcEVpZ0ZCQ1graFJBTkNBQVI2Q2FqVk1xSGlkSnFPU2dqbUpOM0VoSEgvT0tqWgp3NzMvVmJGS1pZbjhYcW1JclNMQi9qRzdpOWs1QlpMYk1HenFzSVVpUmxBWjdEL0J5VjYvSGRJegotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg=="),
+			Pkpem: []byte("LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNIRENDQWNLZ0F3SUJBZ0lSQUxJcjNBSlVHVi9PSnhOSVozdXNQTDh3Q2dZSUtvWkl6ajBFQXdJd2FURUwKTUFrR0ExVUVCaE1DVlZNeEV6QVJCZ05WQkFnVENrTmhiR2xtYjNKdWFXRXhGakFVQmdOVkJBY1REVk5oYmlCRwpjbUZ1WTJselkyOHhGREFTQmdOVkJBb1RDMkoxYVd4a1pYSXVZMjl0TVJjd0ZRWURWUVFERXc1allTNWlkV2xzClpHVnlMbU52YlRBZUZ3MHlNREF4TVRBd09EUTVNREJhRncwek1EQXhNRGN3T0RRNU1EQmFNR2N4Q3pBSkJnTlYKQkFZVEFsVlRNUk13RVFZRFZRUUlFd3BEWVd4cFptOXlibWxoTVJZd0ZBWURWUVFIRXcxVFlXNGdSbkpoYm1OcApjMk52TVE4d0RRWURWUVFMRXdaamJHbGxiblF4R2pBWUJnTlZCQU1NRVVGa2JXbHVRR0oxYVd4a1pYSXVZMjl0Ck1Ga3dFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRWVnbW8xVEtoNG5TYWprb0k1aVRkeElSeC96aW8KMmNPOS8xV3hTbVdKL0Y2cGlLMGl3ZjR4dTR2Wk9RV1MyekJzNnJDRklrWlFHZXcvd2NsZXZ4M1NNNk5OTUVzdwpEZ1lEVlIwUEFRSC9CQVFEQWdlQU1Bd0dBMVVkRXdFQi93UUNNQUF3S3dZRFZSMGpCQ1F3SW9BZ2dUbmpkVU9nCldMNVcxNDNjRGlCVnNQNndVZldxSVN6NG04MzlERGVxcXZBd0NnWUlLb1pJemowRUF3SURTQUF3UlFJaEFNb2QKR2pnN0c2UFZjNEMvRnQyMWtHajVWRUVPWUNIeXJacVBNN2xTdlVidkFpQVB4QU1pcWUwVjgrTjkrRjduWjI2bAppOTJNU05lUHltRlNiSENxd3IxL05BPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="),
+		}
+	*/
+	keypair.Sk = Utils.GetPriKey(keypair.Skpem)
+	keypair.Pk = Utils.GetPubKey(keypair.Pkpem)
+
+	var users []models.UserModel
+	db.Find(&users)
+	for i := 0; i < len(users); i++ {
+		Utils.KeyMap[users[i].Account] = &keypair
+	}
+	println("users keypair initialized")
+
+	//init some ieds
+	var ied1 = ds.IedModel{
+		DeviceId:           "1",
+		DeviceName:         "Intelligent Device Generation-2",
+		DeviceProducer:     "Smart Bridge Company",
+		DeviceWorkingDays:  0,
+		DeviceBelongIem:    "Lakeview Community",
+		DeviceUserAccount:  users[0].Account,
+		DeviceDownInfos:    nil,
+		DeviceWorkingInfos: nil,
+	}
+	iedAsJsonBytes1, _ := json.Marshal(ied1)
+	Services.HLservice.AddIedService(iedAsJsonBytes1)
+
+	//init some contract
+	var contract1 = ds.ContractModel{
+		ContractId:                  "1231",
+		ContractVersion:             "1.0",
+		ContractName:                "Smart Water",
+		ContractCompanyName:         "SanFrancisco Power",
+		ContractCompanyOwnerAccount: users[0].Account,
+		ContractCompanyOwnerSig:     "",
+		ContractDetails:             "saeoijufhnoquawehjnfoiq",
+		EnergyType:                  "water",
+		EnergyPrice:                 "1.39",
+		ContractLastTime:            "2020.01.12",
+		ContractSignTime:            "",
+		ContractUserAccount:         users[0].Account,
+		ContractUserSig:             "",
+	}
+
+	contractAsJsonBytes1, _ := json.Marshal(contract1)
+	var bid ds.BidModel
+	_ = json.Unmarshal(contractAsJsonBytes1, &bid)
+	bidAsJsonBytes, _ := json.Marshal(bid)
+
+	//test use private key to sign
+	signature1, _ := Utils.Sign(bidAsJsonBytes, bid.ContractCompanyOwnerAccount)
+	contract1.ContractCompanyOwnerSig = signature1
+	contractAsJsonBytes1, _ = json.Marshal(contract1)
+
+	signature2, _ := Utils.Sign(contractAsJsonBytes1, contract1.ContractUserAccount)
+	contract1.ContractUserSig = signature2
+	contractAsJsonBytes1, _ = json.Marshal(contract1)
+
+	Services.HLservice.AddContractService(contractAsJsonBytes1)
+}
 
 func init() {
 
@@ -38,17 +133,17 @@ func init() {
 		common.DB.LogMode(true)
 	}
 
-	/*
-		SDKInit.ChannelIdToConfigs = map[string]string{
-			"hustgym":      "/channel-artifacts/HUSTgym.tx",
-			"hustdomitory": "/channel-artifacts/HUSTdomitory.tx",
-		}
+	SDKInit.ChannelIdToConfigs = map[string]string{
+		"hustgym":      "/channel-artifacts/HUSTgym.tx",
+		"hustdomitory": "/channel-artifacts/HUSTdomitory.tx",
+	}
 
-		err := SDKInit.SetupInitInfo("")
-		if err != nil {
-			fmt.Println("Failed in sdk setup" + err.Error())
-		}
-	*/
+	err := SDKInit.SetupInitInfo("")
+	if err != nil {
+		fmt.Println("Failed in sdk setup" + err.Error())
+	}
+
+	InitDb()
 }
 func main() {
 	app := iris.New()
@@ -95,7 +190,7 @@ func main() {
 				userInfo.Headico = "/public/imgs/user2-160x160.jpg"
 			}
 			//保存一个或多个键值
-			userName := DataStructure.AiteBefore(userInfo.Account)
+			userName := ds.AiteBefore(userInfo.Account)
 			ctx.ViewData("userInfo", userInfo)
 			ctx.ViewData("userName", userName)
 			ctx.ViewData("channel", channel)

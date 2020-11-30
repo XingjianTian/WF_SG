@@ -25,6 +25,7 @@ const ChaincodeVersion = "1.0"
 
 var GoPath string = os.Getenv("GOPATH")
 var FabricNetWorkPath string = GoPath + "/src/FabricNetwork"
+var ChaincodePathString = "WF_SG/Chaincode/"
 
 type OrgInfo struct {
 	OrgName               string
@@ -58,7 +59,7 @@ var ChannelIdToConfigs map[string]string
 
 func SetupInitInfo(channelIdSelected string) error {
 
-	return nil
+	//return nil
 
 	if channelIdSelected == "" {
 		channelIdSelected = "hustgym"
@@ -151,7 +152,7 @@ func SetupInitInfo(channelIdSelected string) error {
 			ChannelConfig:        FabricNetWorkPath + ChannelIdToConfigs[channelIdSelected],
 			ChaincodeID:          "mycc-gym",
 			ChaincodeGoPath:      os.Getenv("GOPATH"),
-			ChaincodePath:        "HL/Chaincode/",
+			ChaincodePath:        ChaincodePathString,
 			UserName:             "",
 			OrdererOrgAdmin:      "Admin",
 			OrdererOrgName:       "orderer.gov.com",
@@ -170,7 +171,7 @@ func SetupInitInfo(channelIdSelected string) error {
 			ChannelConfig:        FabricNetWorkPath + ChannelIdToConfigs[channelIdSelected],
 			ChaincodeID:          "mycc-dom",
 			ChaincodeGoPath:      os.Getenv("GOPATH"),
-			ChaincodePath:        "HL/Chaincode/",
+			ChaincodePath:        ChaincodePathString,
 			UserName:             "",
 			OrdererOrgAdmin:      "Admin",
 			OrdererOrgName:       "orderer.gov.com",

@@ -45,6 +45,7 @@ func (c *IedController) GetAddIed() mvc.View {
 	}
 }
 func (c *IedController) PostAddIed() {
+
 	currentAcc := c.Session.GetString("user_session")
 	if err := iedModel.IedAdd(c.Ctx.FormValues(), currentAcc); err == nil {
 		c.Ctx.Redirect("/ied/list/ied")
@@ -57,10 +58,7 @@ func (c *IedController) GetQueryIedBy(id string) mvc.View {
 	//userOrgName := c.Session.GetString("userOrgName")
 	//currentAcc := c.Session.GetString("user_session")
 
-	//response is either tableAsJson or error
 	iedInfo, txID, err := iedModel.IedInfo(id)
-	//test := strings.Contains(response,"UserModel@WH-zhijianju.supervisor.com")
-	//fmt.Println(test)
 	if err != nil {
 		common.DefaultErrorShow(err.Error(), c.Ctx)
 	}

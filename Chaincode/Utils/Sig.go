@@ -27,8 +27,8 @@ var KeyMap = make(map[string]*KeyPair)
 type KeyPair struct {
 	Skpem []byte            //`json: "Skpem"`
 	Pkpem []byte            //`json: "Pkpem"`
-	sk    *ecdsa.PrivateKey `json: "sk"`
-	pk    *ecdsa.PublicKey  `json: "pk"`
+	Sk    *ecdsa.PrivateKey `json: "sk"`
+	Pk    *ecdsa.PublicKey  `json: "Pk"`
 }
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
@@ -70,10 +70,11 @@ func init() {
 	}
 
 }
+
 func GetKeyPairFromPem() {
 	for _, kp := range KeyMap {
-		kp.pk = getPubKey(kp.Pkpem)
-		kp.sk = getPriKey(kp.Skpem)
+		kp.Pk = GetPubKey(kp.Pkpem)
+		kp.Sk = GetPriKey(kp.Skpem)
 	}
 }
 func GetKeyPair() error {
@@ -99,7 +100,7 @@ func GetKeyPair() error {
 			skName := sfi[0].Name()
 			skPath = skPath + sep + skName
 			kp.Skpem, _ = ioutil.ReadFile(skPath)
-			kp.sk = getPriKey(kp.Skpem)
+			kp.Sk = GetPriKey(kp.Skpem)
 
 			pkPath := keyLoc + sep + tfi.Name() + sep + "users" + sep + fi.Name() + sep + "msp" + sep + "signcerts"
 			pfi, perr := ioutil.ReadDir(pkPath)
@@ -109,7 +110,7 @@ func GetKeyPair() error {
 			pkName := pfi[0].Name()
 			pkPath = pkPath + sep + pkName
 			kp.Pkpem, _ = ioutil.ReadFile(pkPath)
-			kp.pk = getPubKey(kp.Pkpem)
+			kp.Pk = GetPubKey(kp.Pkpem)
 			userid = fi.Name()
 			KeyMap[userid] = &kp
 
@@ -122,7 +123,7 @@ func GetKeyPair() error {
 }
 
 //get public key
-func getPubKey(pkpem []byte) *ecdsa.PublicKey {
+func GetPubKey(pkpem []byte) *ecdsa.PublicKey {
 	block, _ := pem.Decode(pkpem)
 	if block == nil {
 		panic("expected pem block")
@@ -144,7 +145,7 @@ func parsePKCS8PrivateKeyECDSA(der []byte) (*ecdsa.PrivateKey, error) {
 	}
 	return typedKey, nil
 }
-func getPriKey(skpem []byte) *ecdsa.PrivateKey {
+func GetPriKey(skpem []byte) *ecdsa.PrivateKey {
 
 	block, _ := pem.Decode(skpem)
 	if block == nil {
@@ -165,7 +166,7 @@ func getPriKey(skpem []byte) *ecdsa.PrivateKey {
 */
 func Sign(rawmessage []byte, userid string) (string, error) {
 
-	sk := KeyMap[userid].sk
+	sk := KeyMap[userid].Sk
 	text := hashtext(rawmessage)
 	//random entropy
 	randSign := randGen(36) //至少36位
@@ -235,7 +236,7 @@ func getSign(signature string) (rint, sint big.Int, err error) {
 
 func Verify(text []byte, signature string, userid string) (bool, error) {
 
-	pk := KeyMap[userid].pk
+	pk := KeyMap[userid].Pk
 	rint, sint, err := getSign(signature)
 	if err != nil {
 		return false, err
